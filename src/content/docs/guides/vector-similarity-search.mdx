@@ -1,5 +1,5 @@
 ---
-title: Vector similarity search with pgvector extension
+title: 使用pgvector扩展进行向量相似度搜索
 slug:  vector-similarity-search
 ---
 
@@ -11,22 +11,22 @@ import CodeTab from '@mdx/CodeTab.astro';
 import Npm from "@mdx/Npm.astro";
 
 <Prerequisites>
-- Get started with [PostgreSQL](/docs/get-started-postgresql)
-- [Select statement](/docs/select)
-- [Indexes](/docs/indexes-constraints#indexes)
-- [sql operator](/docs/sql)
-- [pgvector extension](/docs/extensions/pg#pg_vector)
+- 开始使用 [PostgreSQL](/docs/get-started-postgresql)
+- [Select语句](/docs/select)
+- [索引](/docs/indexes-constraints#indexes)
+- [sql操作符](/docs/sql)
+- [pgvector扩展](/docs/extensions/pg#pg_vector)
 - [Drizzle kit](/docs/kit-overview)
-- You should have installed the `openai` [package](https://www.npmjs.com/package/openai) for generating embeddings. 
+- 你应该已经安装了用于生成嵌入的`openai` [包](https://www.npmjs.com/package/openai)。
 <Npm>
   openai
 </Npm>
-- You should have `drizzle-orm@0.31.0` and `drizzle-kit@0.22.0` or higher.  
+- 你应该使用`drizzle-orm@0.31.0`和`drizzle-kit@0.22.0`或更高版本。
 </Prerequisites>
 
-To implement vector similarity search in PostgreSQL with Drizzle ORM, you can use the `pgvector` extension. This extension provides a set of functions to work with vectors and perform similarity search.
+要在PostgreSQL中使用Drizzle ORM实现向量相似度搜索，你可以使用`pgvector`扩展。这个扩展提供了一组用于处理向量和执行相似度搜索的函数。
 
-As for now, Drizzle doesn't create extension automatically, so you need to create it manually. Create an empty migration file and add SQL query:
+目前，Drizzle不会自动创建扩展，所以你需要手动创建它。创建一个空的迁移文件并添加SQL查询：
 
 <Section>
 ```bash
@@ -38,7 +38,7 @@ CREATE EXTENSION vector;
 ```
 </Section>
 
-To perform similarity search, you need to create a table with a vector column and an `HNSW` or `IVFFlat` index on this column for better performance:
+要执行相似度搜索，你需要创建一个带有向量列的表，并在这个列上创建一个`HNSW`或`IVFFlat`索引以提高性能：
 
 <CodeTabs items={["schema.ts", "migration.sql"]}>
   <CodeTab>
@@ -73,9 +73,9 @@ To perform similarity search, you need to create a table with a vector column an
   ```
 </CodeTabs>
 
-The `embedding` column is used to store vector embeddings of the guide descriptions. Vector embedding is just a representation of some data. It converts different types of data into a common format (vectors) that language models can process. This allows us to perform mathematical operations, such as measuring the distance between two vectors, to determine how similar or different two data items are.
+`embedding`列用于存储指南描述的向量嵌入。向量嵌入只是数据的一种表示形式。它将不同类型的数据转换为语言模型可以处理的通用格式（向量）。这允许我们执行数学运算，比如测量两个向量之间的距离，来确定两个数据项的相似或不同程度。
 
-In this example we will use `OpenAI` model to generate [embeddings](https://platform.openai.com/docs/guides/embeddings) for the description:
+在这个例子中，我们将使用`OpenAI`模型来生成描述的[嵌入](https://platform.openai.com/docs/guides/embeddings)：
 ```ts copy
 import OpenAI from 'openai';
 
@@ -95,7 +95,7 @@ export const generateEmbedding = async (value: string): Promise<number[]> => {
 };
 ```
 
-To search for similar guides by embedding, you can use `gt` and `sql` operators with `cosineDistance` function to calculate the similarity between the `embedding` column and the generated embedding:
+要通过嵌入搜索相似的指南，你可以使用`gt`和`sql`操作符以及`cosineDistance`函数来计算`embedding`列和生成的嵌入之间的相似度：
 
 <Section>
 ```ts copy {10,15,16}
@@ -122,7 +122,7 @@ const findSimilarGuides = async (description: string) => {
 ```
 
 ```ts
-const description = 'Guides on using Drizzle ORM with different platforms';
+const description = '使用Drizzle ORM的不同平台指南';
 
 const similarGuides = await findSimilarGuides(description);
 ```

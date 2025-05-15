@@ -1,5 +1,5 @@
 ---
-title: Point datatype in PostgreSQL
+title: PostgreSQL 中的点数据类型
 slug: point-datatype-psql
 ---
 
@@ -9,14 +9,14 @@ import CodeTabs from '@mdx/CodeTabs.astro';
 import CodeTab from '@mdx/CodeTab.astro';
 
 <Prerequisites>
-- Get started with [PostgreSQL](/docs/get-started-postgresql)
-- [Point datatype](/docs/column-types/pg#point)
-- [Filtering in select statement](/docs/select#filtering)
-- [sql operator](/docs/sql)
+- 从 [PostgreSQL](/docs/get-started-postgresql) 开始
+- [点数据类型](/docs/column-types/pg#point)
+- [Select 语句中的过滤](/docs/select#filtering)
+- [sql 运算符](/docs/sql)
 </Prerequisites>
 
-PostgreSQL has a special datatype to store geometric data called `point`. It is used to represent a point in a two-dimensional space. The point datatype is represented as a pair of `(x, y)` coordinates.
-The point expects to receive longitude first, followed by latitude.
+PostgreSQL 有一个用于存储几何数据的特殊数据类型，称为 `point`。它用于表示二维空间中的一个点。点数据类型表示为一对 `(x, y)` 坐标。
+点数据类型期望首先接收经度，然后是纬度。
 
 <Section>
 ```ts copy {6}
@@ -38,7 +38,7 @@ await db.execute(
 ```
 </Section>
 
-This is how you can create table with `point` datatype in Drizzle:
+这是如何在 Drizzle 中创建带有 `point` 数据类型的表：
 
 ```ts {6}
 import { pgTable, point, serial, text } from 'drizzle-orm/pg-core';
@@ -50,7 +50,7 @@ export const stores = pgTable('stores', {
 });
 ```
 
-This is how you can insert point data into the table in Drizzle:
+这是如何在 Drizzle 中向表中插入点数据：
 
 ```ts {4, 10, 16}
 // mode: 'xy'
@@ -72,7 +72,7 @@ await db.insert(stores).values({
 });
 ```
 
-To compute the distance between the objects you can use `<->` operator. This is how you can query for the nearest location by coordinates in Drizzle:
+要计算对象之间的距离，你可以使用 `<->` 运算符。这是如何在 Drizzle 中通过坐标查询最近的位置：
 
 <Section>
 ```ts {9, 14, 17}
@@ -103,7 +103,7 @@ limit 1;
 ```
 </Section>
 
-To filter rows to include only those where a `point` type `location` falls within a specified rectangular boundary defined by two diagonal points you can user `<@` operator. It checks if the first object is contained in or on the second object:
+要筛选行以仅包含 `point` 类型的 `location` 落在由两个对角点定义的矩形边界内的行，你可以使用 `<@` 运算符。它检查第一个对象是否包含在第二个对象中或在其上：
 
 <Section>
 ```ts {12}
@@ -126,6 +126,3 @@ await db
 select * from stores where location <@ box(point(-88, 40), point(-73, 43));
 ```
 </Section>
-
-
-

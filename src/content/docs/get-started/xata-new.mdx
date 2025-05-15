@@ -19,48 +19,48 @@ import SetupEnv from '@mdx/get-started/SetupEnv.mdx';
 
 <Breadcrumbs/>
 
-# Get Started with Drizzle and Xata
+# Drizzle 和 Xata 入门指南
 
 <Prerequisites>
-  - **dotenv** - package for managing environment variables - [read here](https://www.npmjs.com/package/dotenv)
-  - **tsx** - package for running TypeScript files - [read here](https://tsx.is/)
-  - **Xata database** - [read here](https://xata.io/docs)
-  - **Xata driver** - [read here](https://xata.io/docs/sdk/typescript/overview) & [GitHub](https://github.com/xataio/client-ts)
+  - **dotenv** - 用于管理环境变量的包 - [了解更多](https://www.npmjs.com/package/dotenv)
+  - **tsx** - 用于运行 TypeScript 文件的包 - [了解更多](https://tsx.is/)
+  - **Xata 数据库** - [了解更多](https://xata.io/docs)
+  - **Xata 驱动程序** - [了解更多](https://xata.io/docs/sdk/typescript/overview) & [GitHub](https://github.com/xataio/client-ts)
 </Prerequisites>
 
 <FileStructure/>
 
-#### Step 1 - Install **@xata.io/client** package
+#### 步骤 1 - 安装 **@xata.io/client** 包
 <InstallPackages lib='@xata.io/client'/>
 
-#### Step 2 - Setup connection variables
+#### 步骤 2 - 设置连接变量
 
 <SetupEnv env_variable='DATABASE_URL' />
 
-#### Step 3 - Generate Xata client
+#### 步骤 3 - 生成 Xata 客户端
 
-To generate the Xata client, please refer to the [Xata docs](https://xata.io/docs/getting-started/installation)
+要生成 Xata 客户端，请参考 [Xata 文档](https://xata.io/docs/getting-started/installation)
 
-#### Step 4 - Connect Drizzle ORM to the database
+#### 步骤 4 - 连接 Drizzle ORM 到数据库
 
 <ConnectXata/>
 
-#### Step 5 - Create a table
+#### 步骤 5 - 创建表
 
 <CreateTable />
 
-#### Step 6 - Setup Drizzle config file
+#### 步骤 6 - 设置 Drizzle 配置文件
 
 <SetupConfig dialect='postgresql' env_variable='DATABASE_URL'/>
 
-#### Step 7 - Applying changes to the database
+#### 步骤 7 - 应用数据库变更
 
 <ApplyChanges />
 
-#### Step 8 - Seed and Query the database
+#### 步骤 8 - 填充数据并查询数据库
 
 <QueryXata />
 
-#### Step 9 - Run index.ts file
+#### 步骤 9 - 运行 index.ts 文件
 
 <RunFile/>

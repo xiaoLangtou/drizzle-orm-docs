@@ -2,7 +2,7 @@ import IsSupportedChipGroup from '@mdx/IsSupportedChipGroup.astro';
 import Callout from '@mdx/Callout.astro';
 import Section from '@mdx/Section.astro';
 
-# SQL Update
+# SQL 更新
 
 ```typescript copy
 await db.update(users)
@@ -10,9 +10,9 @@ await db.update(users)
   .where(eq(users.name, 'Dan'));
 ```
 
-The object that you pass to `update` should have keys that match column names in your database schema.
-Values of `undefined` are ignored in the object: to set a column to `null`, pass `null`.
-You can pass SQL as a value to be used in the update object, like this:
+您传递给 `update` 的对象应该具有与数据库模式中列名匹配的键。
+值为 `undefined` 的字段在对象中会被忽略：要将列设置为 `null`，请传递 `null`。
+您可以在更新对象中传递 SQL 作为值，如下所示：
 
 ```typescript copy
 await db.update(users)
@@ -20,11 +20,11 @@ await db.update(users)
   .where(eq(users.name, 'Dan'));
 ```
 
-### Limit
+### 限制
 
 <IsSupportedChipGroup chips={{ 'PostgreSQL': false, 'MySQL': true, 'SQLite': true, 'SingleStore': true }} />
 
-Use `.limit()` to add `limit` clause to the query - for example:
+使用 `.limit()` 为查询添加 `limit` 子句 - 例如：
 <Section>
 ```typescript
 await db.update(usersTable).set({ verified: true }).limit(2);
@@ -34,8 +34,8 @@ update "users" set "verified" = $1 limit $2;
 ```
 </Section>
 
-### Order By
-Use `.orderBy()` to add `order by` clause to the query, sorting the results by the specified fields:
+### 排序
+使用 `.orderBy()` 为查询添加 `order by` 子句，按指定字段对结果进行排序：
 <Section>
 ```typescript
 import { asc, desc } from 'drizzle-orm';
@@ -43,7 +43,7 @@ import { asc, desc } from 'drizzle-orm';
 await db.update(usersTable).set({ verified: true }).orderBy(usersTable.name);
 await db.update(usersTable).set({ verified: true }).orderBy(desc(usersTable.name));
 
-// order by multiple fields
+// 按多个字段排序
 await db.update(usersTable).set({ verified: true }).orderBy(usersTable.name, usersTable.name2);
 await db.update(usersTable).set({ verified: true }).orderBy(asc(usersTable.name), desc(usersTable.name2));
 ```
@@ -56,9 +56,9 @@ update "users" set "verified" = $1 order by "name" asc, "name2" desc;
 ```
 </Section>
 
-### Update with returning
+### 更新并返回
 <IsSupportedChipGroup chips={{ 'PostgreSQL': true, 'SQLite': true, 'MySQL': false , 'SingleStore': false}} />
-You can update a row and get it back in PostgreSQL and SQLite:
+您可以在 PostgreSQL 和 SQLite 中更新一行并获取它：
 ```typescript copy
 const updatedUserId: { updatedId: number }[] = await db.update(users)
   .set({ name: 'Mr. Dan' })
@@ -66,13 +66,13 @@ const updatedUserId: { updatedId: number }[] = await db.update(users)
   .returning({ updatedId: users.id });
 ```
 
-## `with update` clause
+## `with update` 子句
 
 <Callout>
-  Check how to use WITH statement with [select](/docs/select#with-clause), [insert](/docs/insert#with-insert-clause), [delete](/docs/delete#with-delete-clause)
+  查看如何在 [select](/docs/select#with-clause)、[insert](/docs/insert#with-insert-clause)、[delete](/docs/delete#with-delete-clause) 中使用 WITH 语句
 </Callout>
 
-Using the `with` clause can help you simplify complex queries by splitting them into smaller subqueries called common table expressions (CTEs):
+使用 `with` 子句可以帮助您通过将它们拆分为称为公共表表达式（CTEs）的较小子查询来简化复杂查询：
 <Section>
 ```typescript copy
 const averagePrice = db.$with('average_price').as(
@@ -101,18 +101,17 @@ returning "id"
 
 <IsSupportedChipGroup chips={{ 'PostgreSQL': true, 'MySQL': false, 'SQLite': true, 'SingleStore': false }} />
 
-As the SQLite documentation mentions:
+正如 SQLite 文档所述：
 
-> The UPDATE-FROM idea is an extension to SQL that allows an UPDATE statement to be driven by other tables in the database. 
-The "target" table is the specific table that is being updated. With UPDATE-FROM you can join the target table 
-against other tables in the database in order to help compute which rows need updating and what 
-the new values should be on those rows
+> UPDATE-FROM 想法是 SQL 的扩展，允许 UPDATE 语句由数据库中的其他表驱动。
+"目标"表是正在更新的特定表。使用 UPDATE-FROM，您可以将目标表与数据库中的其他表连接，
+以帮助计算需要更新的行以及这些行上的新值应该是什么
 
-Similarly, the PostgreSQL documentation states:
+类似地，PostgreSQL 文档指出：
 
-> A table expression allowing columns from other tables to appear in the WHERE condition and update expressions
+> 一个表表达式，允许其他表的列出现在 WHERE 条件和更新表达式中
 
-Drizzle also supports this feature starting from version `drizzle-orm@0.36.3`
+Drizzle 从版本 `drizzle-orm@0.36.3` 开始也支持此功能
 
 <Section>
 ```ts
@@ -131,7 +130,7 @@ where ("cities"."name" = $1 and "users"."name" = $2)
 ```
 </Section>
 
-You can also alias tables that are joined (in PG, you can also alias the updating table too).
+您也可以为连接的表设置别名（在 PG 中，您也可以为更新表设置别名）。
 <Section>
 ```ts
 const c = alias(cities, 'c');
@@ -148,7 +147,7 @@ from "cities" "c"
 
 <IsSupportedChipGroup chips={{ 'PostgreSQL': true, 'MySQL': false, 'SQLite': false, 'SingleStore': false }} />
 
-In Postgres, you can also return columns from the joined tables.
+在 Postgres 中，您还可以返回连接表中的列。
 <Section>
 ```ts
 const updatedUsers = await db

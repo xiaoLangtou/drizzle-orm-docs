@@ -6,32 +6,32 @@ import WhatsNextPostgres from "@mdx/WhatsNextPostgres.astro";
 import Prerequisites from "@mdx/Prerequisites.astro";
 import CodeTabs from "@mdx/CodeTabs.astro";
 
-# Drizzle \<\> Cloudflare D1
+# Drizzle <> Cloudflare D1</>
 
 <Prerequisites>
-- Database [connection basics](/docs/connect-overview) with Drizzle
-- D1 Database - [website](https://developers.cloudflare.com/d1/)
-- D1 driver - [website](https://developers.cloudflare.com/d1/build-with-d1/d1-client-api/)
+- 数据库[连接基础](/docs/connect-overview)与 Drizzle
+- D1 数据库 - [官网](https://developers.cloudflare.com/d1/)
+- D1 驱动 - [官网](https://developers.cloudflare.com/d1/build-with-d1/d1-client-api/)
 </Prerequisites>
 
-According to the **[official website](https://developers.cloudflare.com/d1/)**, 
-D1 is Cloudflare's first queryable relational database.  
-  
-Drizzle ORM fully supports the Cloudflare D1 database and Cloudflare Workers environment.
-We embrace SQL dialects and dialect specific drivers and syntax and mirror most popular 
-SQLite-like `all`, `get`, `values` and `run` query methods syntax.
+根据**[官方网站](https://developers.cloudflare.com/d1/)**，
+D1 是 Cloudflare 的第一个可查询的关系型数据库。
 
-To setup project for your Cloudflare D1 please refer to **[official docs.](https://developers.cloudflare.com/d1/)**
+Drizzle ORM 完全支持 Cloudflare D1 数据库和 Cloudflare Workers 环境。
+我们支持 SQL 方言和方言特定的驱动程序和语法，并且模仿最流行的
+SQLite 风格的 `all`、`get`、`values` 和 `run` 查询方法语法。
 
-#### Step 1 - Install packages
+要为你的 Cloudflare D1 设置项目，请参考**[官方文档。](https://developers.cloudflare.com/d1/)**
+
+#### 步骤 1 - 安装包
 <Npm>
 drizzle-orm
 -D drizzle-kit
 </Npm>
 
-#### Step 2 - Initialize the driver and make a query
+#### 步骤 2 - 初始化驱动并执行查询
 
-You would need to have either a `wrangler.json` or a `wrangler.toml` file for D1 database and will look something like this:
+你需要有一个 `wrangler.json` 或 `wrangler.toml` 文件用于 D1 数据库，它看起来会像这样：
 <CodeTabs items={["wrangler.json", "wrangler.toml"]}>
 ```json
 {
@@ -65,7 +65,7 @@ migrations_dir = "drizzle/migrations"
 ```
 </CodeTabs>
 
-Make your first D1 query:
+执行你的第一个 D1 查询：
 ```typescript copy
 import { drizzle } from 'drizzle-orm/d1';
 
@@ -82,6 +82,6 @@ export default {
 };
 ```
 
-#### What's next?
+#### 下一步？
 
 <WhatsNextPostgres/>

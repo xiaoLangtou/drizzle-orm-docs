@@ -1,23 +1,21 @@
 import Tab from '@mdx/Tab.astro';
 import Tabs from '@mdx/Tabs.astro';
 
-# Query performance
-When it comes to **Drizzle** — we're a thin TypeScript layer on top of SQL with 
-almost 0 overhead and to make it actual 0, you can utilise our prepared statements API.
+# 查询性能
+当谈到 **Drizzle** 时 — 我们是在 SQL 之上的一个轻量级 TypeScript 层，几乎没有额外开销。为了使其实际达到零开销，你可以使用我们的预处理语句 API。
   
-**When you run a query on the database, there are several things that happen:**
-- all the configurations of the query builder got concatenated to the SQL string
-- that string and params are sent to the database driver
-- driver compiles SQL query to the binary SQL executable format and sends it to the database
+**当你在数据库上运行查询时，会发生以下几件事：**
+- 查询构建器的所有配置都被连接成 SQL 字符串
+- 该字符串和参数被发送到数据库驱动程序
+- 驱动程序将 SQL 查询编译成二进制 SQL 可执行格式并发送到数据库
 
-With prepared statements you do SQL concatenation once on the Drizzle ORM side and then database 
-driver is able to reuse precompiled binary SQL instead of parsing query all the time. 
-It has extreme performance benefits on large SQL queries.  
+使用预处理语句，你只需在 Drizzle ORM 端进行一次 SQL 连接，然后数据库驱动程序就能重用预编译的二进制 SQL，而不是每次都解析查询。
+这对大型 SQL 查询有极大的性能优势。
 
-Different database drivers support prepared statements in different ways and sometimes 
-Drizzle ORM you can go [**faster than better-sqlite3 driver.**](https://twitter.com/_alexblokh/status/1593593415907909634)
+不同的数据库驱动程序以不同的方式支持预处理语句，有时候
+Drizzle ORM 你甚至可以[**比 better-sqlite3 驱动更快。**](https://twitter.com/_alexblokh/status/1593593415907909634)
 
-## Prepared statement
+## 预处理语句
 <Tabs items={["PostgreSQL", "MySQL", "SQLite", "SingleStore"]}>
   <Tab>
     ```typescript copy {3}
@@ -65,8 +63,8 @@ Drizzle ORM you can go [**faster than better-sqlite3 driver.**](https://twitter.
   </Tab> 
 </Tabs>
 
-## Placeholder
-Whenever you need to embed a dynamic runtime value - you can use the `sql.placeholder(...)` api
+## 占位符
+当你需要嵌入动态运行时值时 - 你可以使用 `sql.placeholder(...)` API
 <Tabs items={["PostgreSQL", "MySQL", "SQLite", "SingleStore"]}>
   <Tab>
     ```ts {6,9-10,15,18}

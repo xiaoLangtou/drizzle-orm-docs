@@ -2,13 +2,13 @@ import CodeTabs from '@mdx/CodeTabs.astro';
 import CodeTab from '@mdx/CodeTab.astro';
 import Section from '@mdx/Section.astro';
 
-# Joins [SQL]
-Join clause in SQL is used to combine 2 or more tables, based on related columns between them.
-Drizzle ORM joins syntax is a balance between the SQL-likeness and type safety.
+# 连接 [SQL]
+SQL 中的连接子句用于基于它们之间的相关列组合 2 个或更多个表。
+Drizzle ORM 连接语法在 SQL 相似性和类型安全性之间取得了平衡。
 
-## Join types
-Drizzle ORM has APIs for `INNER JOIN [LATERAL]`, `FULL JOIN`, `LEFT JOIN [LATERAL]`, `RIGHT JOIN`, `CROSS JOIN [LATERAL]`.
-Lets have a quick look at examples based on below table schemas:
+## 连接类型
+Drizzle ORM 有 `INNER JOIN [LATERAL]`、`FULL JOIN`、`LEFT JOIN [LATERAL]`、`RIGHT JOIN`、`CROSS JOIN [LATERAL]` 的 API。
+让我们基于以下表模式快速查看示例：
 ```typescript copy
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -22,7 +22,7 @@ export const pets = pgTable('pets', {
 })
 ```
 
-### Left Join
+### 左连接
 <Section>
 ```typescript copy
 const result = await db.select().from(users).leftJoin(pets, eq(users.id, pets.ownerId))
@@ -31,7 +31,7 @@ const result = await db.select().from(users).leftJoin(pets, eq(users.id, pets.ow
 select ... from "users" left join "pets" on "users"."id" = "pets"."owner_id"
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
     user: {
         id: number;
@@ -46,7 +46,7 @@ const result: {
 ```
 </Section>
 
-### Left Join Lateral
+### 左连接横向
 <Section>
 ```typescript copy
 const subquery = db.select().from(pets).where(gte(users.age, 16)).as('userPets')
@@ -56,7 +56,7 @@ const result = await db.select().from(users).leftJoinLateral(subquery, sql`true`
 select ... from "users" left join lateral (select ... from "pets" where "users"."age" >= 16) "userPets" on true
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
     user: {
         id: number;
@@ -71,7 +71,7 @@ const result: {
 ```
 </Section>
 
-### Right Join
+### 右连接
 <Section>
 ```typescript copy
 const result = await db.select().from(users).rightJoin(pets, eq(users.id, pets.ownerId))
@@ -80,7 +80,7 @@ const result = await db.select().from(users).rightJoin(pets, eq(users.id, pets.o
 select ... from "users" right join "pets" on "users"."id" = "pets"."owner_id"
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
     user: {
         id: number;
@@ -95,7 +95,7 @@ const result: {
 ```
 </Section>
 
-### Inner Join
+### 内连接
 <Section>
 ```typescript copy
 const result = await db.select().from(users).innerJoin(pets, eq(users.id, pets.ownerId))
@@ -104,7 +104,7 @@ const result = await db.select().from(users).innerJoin(pets, eq(users.id, pets.o
 select ... from "users" inner join "pets" on "users"."id" = "pets"."owner_id"
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
     user: {
         id: number;
@@ -119,7 +119,7 @@ const result: {
 ```
 </Section>
 
-### Inner Join Lateral
+### 内连接横向
 <Section>
 ```typescript copy
 const subquery = db.select().from(pets).where(gte(users.age, 16)).as('userPets')
@@ -129,7 +129,7 @@ const result = await db.select().from(users).innerJoinLateral(subquery, sql`true
 select ... from "users" inner join lateral (select ... from "pets" where "users"."age" >= 16) "userPets" on true
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
     user: {
         id: number;
@@ -144,7 +144,7 @@ const result: {
 ```
 </Section>
 
-### Full Join
+### 全连接
 <Section>
 ```typescript copy
 const result = await db.select().from(users).fullJoin(pets, eq(users.id, pets.ownerId))
@@ -153,7 +153,7 @@ const result = await db.select().from(users).fullJoin(pets, eq(users.id, pets.ow
 select ... from "users" full join "pets" on "users"."id" = "pets"."owner_id"
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
     user: {
         id: number;
@@ -168,7 +168,7 @@ const result: {
 ```
 </Section>
 
-### Cross Join
+### 交叉连接
 <Section>
 ```typescript copy
 const result = await db.select().from(users).crossJoin(pets)
@@ -177,7 +177,7 @@ const result = await db.select().from(users).crossJoin(pets)
 select ... from "users" cross join "pets"
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
     user: {
         id: number;
@@ -192,7 +192,7 @@ const result: {
 ```
 </Section>
 
-### Cross Join Lateral
+### 交叉连接横向
 <Section>
 ```typescript copy
 const subquery = db.select().from(pets).where(gte(users.age, 16)).as('userPets')
@@ -202,7 +202,7 @@ const result = await db.select().from(users).crossJoinLateral(subquery)
 select ... from "users" cross join lateral (select ... from "pets" where "users"."age" >= 16) "userPets"
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
     user: {
         id: number;
@@ -217,9 +217,9 @@ const result: {
 ```
 </Section>
 
-## Partial select
-If you need to select a particular subset of fields or to have a flat response type, Drizzle ORM
-supports joins with partial select and will automatically infer return type based on `.select({ ... })` structure.
+## 部分选择
+如果您需要选择特定的字段子集或要有扁平的响应类型，Drizzle ORM
+支持带有部分选择的连接，并将根据 `.select({ ... })` 结构自动推断返回类型。
 <Section>
 ```typescript copy
 await db.select({
@@ -231,17 +231,17 @@ await db.select({
 select "users"."id", "pets"."id" from "users" left join "pets" on "users"."id" = "pets"."owner_id"
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
   userId: number;
   petId: number | null;
 }[];
 ```
 </Section>
-You might've noticed that `petId` can be null now, it's because we're left joining and there can be users without a pet.
+您可能已经注意到 `petId` 现在可以为 null，这是因为我们正在左连接，可能有没有宠物的用户。
 
-It's very important to keep in mind when using `sql` operator for partial selection fields and aggregations when needed,
-you should to use `sql<type | null>` for proper result type inference, that one is on you!
+在使用 `sql` 操作符进行部分选择字段和聚合时，非常重要的是要记住，
+当需要时，您应该使用 `sql<type | null>` 来正确推断结果类型，这取决于您！
 <Section>
 ```typescript copy
 const result = await db.select({
@@ -249,14 +249,14 @@ const result = await db.select({
   petId: pets.id,
   petName1: sql`upper(${pets.name})`,
   petName2: sql<string | null>`upper(${pets.name})`,
-  //˄we should explicitly tell 'string | null' in type, since we're left joining that field
+  //˄我们应该显式告知 'string | null' 类型，因为我们正在左连接该字段
 }).from(user).leftJoin(pets, eq(users.id, pets.ownerId))
 ```
 ```sql
 select "users"."id", "pets"."id", upper("pets"."name")... from "users" left join "pets" on "users"."id" = "pets"."owner_id"
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
   userId: number;
   petId: number | null;
@@ -265,8 +265,8 @@ const result: {
 }[];
 ```
 </Section>
-To avoid plethora of nullable fields when joining tables with lots of columns we can utilise our **nested select object syntax**,
-our smart type inference will make whole object nullable instead of making all table fields nullable!
+为了避免在连接具有大量列的表时出现大量可空字段，我们可以利用我们的**嵌套选择对象语法**，
+我们的智能类型推断将使整个对象可空，而不是使所有表字段可空！
 <Section>
 ```typescript copy
 await db.select({
@@ -283,7 +283,7 @@ await db.select({
 select ... from "users" full join "pets" on "users"."id" = "pets"."owner_id"
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
     userId: number | null;
     userName: string | null;
@@ -296,10 +296,10 @@ const result: {
 ```
 </Section>
 
-## Aliases & Selfjoins
-Drizzle ORM supports table aliases which comes really handy when you need to do selfjoins.
+## 别名和自连接
+Drizzle ORM 支持表别名，这在需要进行自连接时非常方便。
 
-Lets say you need to fetch users with their parents:
+假设您需要获取带有其父级的用户：
 <CodeTabs items={["index.ts", "schema.ts"]}>
 <CodeTab>
 ```typescript copy
@@ -315,7 +315,7 @@ const result = db
 select ... from "user" left join "user" "parent" on "parent"."id" = "user"."parent_id"
 ```
 ```typescript
-// result type
+// 结果类型
 const result: {
     user: {
         id: number;
@@ -341,10 +341,10 @@ export const user = pgTable("user", {
 
 </CodeTabs>
 
-## Aggregating results
-Drizzle ORM delivers name-mapped results from the driver without changing the structure.
+## 聚合结果
+Drizzle ORM 从驱动程序传递名称映射的结果，而不改变结构。
 
-You're free to operate with results the way you want, here's an example of mapping many-one relational data:
+您可以自由地按照您想要的方式操作结果，这里是一个映射多对一关系数据的示例：
 ```typescript
 type User = typeof users.$inferSelect;
 type Pet = typeof pets.$inferSelect;
@@ -372,14 +372,14 @@ const result = rows.reduce<Record<number, { user: User; pets: Pet[] }>>(
   {}
 );
 
-// result type
+// 结果类型
 const result: Record<number, {
     user: User;
     pets: Pet[];
 }>;
 ```
 
-## Many-to-one example
+## 多对一示例
 ```typescript
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
@@ -399,7 +399,7 @@ const db = drizzle();
 
 const result = db.select().from(cities).leftJoin(users, eq(cities.id, users.cityId)).all();
 ```
-## Many-to-many example
+## 多对多示例
 ```typescript
 const users = sqliteTable('users', {
   id: integer('id').primaryKey(),
@@ -417,7 +417,7 @@ const usersToChatGroups = sqliteTable('usersToChatGroups', {
 });
 
 
-// querying user group with id 1 and all the participants(users)
+// 查询 id 为 1 的用户组及其所有参与者（用户）
 db.select()
   .from(usersToChatGroups)
   .leftJoin(users, eq(usersToChatGroups.userId, users.id))

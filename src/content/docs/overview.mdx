@@ -1,55 +1,54 @@
 import Callout from '@mdx/Callout.astro';
 import CodeTabs from '@mdx/CodeTabs.astro';
-import YoutubeCards from '@mdx/YoutubeCards.astro';
 import GetStartedLinks from '@mdx/GetStartedLinks/index.astro'
 
 # Drizzle ORM
 
-Drizzle ORM is a headless TypeScript ORM with a head. 🐲
-> Drizzle is a good friend who's there for you when necessary and doesn't bother when you need some space.
+Drizzle ORM 是一个有态度的无头 TypeScript ORM。🐲
+> Drizzle 就像一个好朋友，在你需要的时候随时在身边，在你想独处时又不会打扰你。
 
-It looks and feels simple, performs on day _1000_ of your project,\
-lets you do things your way, and is there when you need it.
+它简单易用，在项目运行 _1000_ 天后依然表现出色，\
+让你按照自己的方式开发，并在你需要时提供支持。
 
-**It's the only ORM with both [relational](/docs/rqb) and [SQL-like](/docs/select) query APIs**, 
-providing you the best of both worlds when it comes to accessing your relational data. 
-Drizzle is lightweight, performant, typesafe, non-lactose, gluten-free, sober, flexible and **serverless-ready by design**.
-Drizzle is not just a library, it's an experience. 🤩
+**它是唯一同时提供[关系查询](/docs/rqb)和[类 SQL](/docs/select)查询 API 的 ORM**，
+在访问关系型数据时为你提供两全其美的解决方案。
+Drizzle 轻量、高性能、类型安全、无依赖、无乳糖、无麸质、清醒、灵活，并且**天生为 serverless 设计**。
+Drizzle 不仅仅是一个库，它是一种体验。🤩
 
 [![Drizzle bestofjs](@/assets/images/bestofjs.jpg)](https://bestofjs.org/projects/drizzle-orm)
 
-## Headless ORM? 
-First and foremost, Drizzle is a library and a collection of complementary opt-in tools. 
+## 什么是无头 ORM？
+首先，Drizzle 是一个库，以及一系列可选的配套工具的集合。
 
-**ORM** stands for _object relational mapping_, and developers tend to call Django-like or Spring-like tools an ORM. 
-We truly believe it's a misconception based on legacy nomenclature, and we call them **data frameworks**.
+**ORM** 代表 _对象关系映射（object relational mapping）_，开发者通常把类似 Django 或 Spring 的工具称为 ORM。
+我们认为这是基于传统命名法的一个误解，我们称它们为**数据框架**。
 
 <Callout type="error" emoji="️💔">
-  With data frameworks you have to build projects **around them** and not **with them**.
+  使用数据框架时，你必须**围绕它们**而不是**使用它们**来构建项目。
 </Callout>
 
-**Drizzle** lets you build your project the way you want, without interfering with your project or structure. 
+**Drizzle** 让你可以按照自己想要的方式构建项目，而不会干扰你的项目或结构。
 
-Using Drizzle you can define and manage database schemas in TypeScript, access your data in a SQL-like 
-or relational way, and take advantage of opt-in tools 
-to push your developer experience _through the roof_. 🤯 
+使用 Drizzle，你可以用 TypeScript 定义和管理数据库模式，以类 SQL
+或关系型的方式访问数据，并利用可选工具
+让你的开发体验_飞上天_。🤯
 
-## Why SQL-like?
-**If you know SQL, you know Drizzle.**
+## 为什么是类 SQL？
+**如果你懂 SQL，你就懂 Drizzle。**
 
-Other ORMs and data frameworks tend to deviate/abstract you away from SQL, which 
-leads to a double learning curve: needing to know both SQL and the framework's API.  
+其他 ORM 和数据框架往往会让你远离 SQL，这
+导致了双重学习曲线：需要同时了解 SQL 和框架的 API。
 
-Drizzle is the opposite. 
-We embrace SQL and built Drizzle to be SQL-like at its core, so you can have zero to no 
-learning curve and access to the full power of SQL.  
+Drizzle 则相反。
+我们拥抱 SQL，并将 Drizzle 构建成以 SQL 为核心，这样你就可以零学习曲线，
+充分发挥 SQL 的全部威力。
 
-We bring all the familiar **[SQL schema](/docs/sql-schema-declaration)**, **[queries](/docs/select)**, 
-**[automatic migrations](/docs/migrations)** and **[one more thing](/docs/rqb)**. ✨
+我们提供所有熟悉的功能：**[SQL 模式](/docs/sql-schema-declaration)**、**[查询](/docs/select)**、
+**[自动迁移](/docs/migrations)** 以及 **[更多惊喜](/docs/rqb)**。✨
 
 <CodeTabs items={["index.ts", "schema.ts", "migration.sql"]}>
 ```typescript copy
-// Access your data
+// 访问数据
 await db
 	.select()
 	.from(countries)
@@ -57,7 +56,7 @@ await db
 	.where(eq(countries.id, 10))
 ```
 ```typescript copy
-// manage your schema
+// 管理模式
 export const countries = pgTable('countries', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 256 }),
@@ -70,7 +69,7 @@ export const cities = pgTable('cities', {
 });
 ```
 ```sql
--- generate migrations
+-- 生成迁移
 CREATE TABLE IF NOT EXISTS "countries" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" varchar(256)
@@ -86,14 +85,14 @@ ALTER TABLE "cities" ADD CONSTRAINT "cities_country_id_countries_id_fk" FOREIGN 
 ```
 </CodeTabs>
 
-## Why not SQL-like?
-We're always striving for a perfectly balanced solution, and while SQL-like does cover 100% of the needs, 
-there are certain common scenarios where you can query data in a better way.  
+## 为什么不总是类 SQL？
+我们一直在追求完美平衡的解决方案，虽然类 SQL 可以满足 100% 的需求，
+但在某些常见场景下，还有更好的数据查询方式。
 
-We've built the **[Queries API](/docs/rqb)** for you, so you can fetch relational nested data from the database 
-in the most convenient and performant way, and never think about joins and data mapping.  
+我们为你构建了 **[查询 API](/docs/rqb)**，这样你就可以以最便捷和高效的方式从数据库中
+获取关系嵌套数据，再也不用考虑连接和数据映射。
 
-**Drizzle always outputs exactly 1 SQL query.** Feel free to use it with serverless databases and never worry about performance or roundtrip costs!
+**Drizzle 始终只生成一条 SQL 查询。** 放心地在 serverless 数据库中使用它，永远不用担心性能或往返成本！
 
 ```ts
 const result = await db.query.users.findMany({
@@ -103,153 +102,26 @@ const result = await db.query.users.findMany({
 });
 ```
 
-## Serverless?
+## Serverless？
 <Callout type="info" emoji="🥳">
-  The best part is no part. **Drizzle has exactly 0 dependencies!**
+  最好的部分就是没有部分。**Drizzle 完全零依赖！**
 </Callout>
 
 
-![Drizzle is slim an Serverless ready](@/assets/images/drizzle31kb.jpg)
+![Drizzle 轻量且为 Serverless 准备](@/assets/images/drizzle31kb.jpg)
   
-Drizzle ORM is dialect-specific, slim, performant and serverless-ready **by design**.  
+Drizzle ORM 是特定于方言的、轻量的、高性能的，并且**天生**为 serverless 准备。
 
-We've spent a lot of time to make sure you have best-in-class SQL dialect support, including Postgres, MySQL, and others.
+我们花了大量时间来确保你能获得一流的 SQL 方言支持，包括 Postgres、MySQL 等。
 
-Drizzle operates natively through industry-standard database drivers. We support all major **[PostgreSQL](/docs/get-started-postgresql)**, **[MySQL](/docs/get-started-mysql)**, **[SQLite](/docs/get-started-sqlite)** or **[SingleStore](/docs/get-started-singlestore)**drivers out there, and we're adding new ones **[really fast](https://twitter.com/DrizzleORM/status/1653082492742647811?s=20)**.  
+Drizzle 通过行业标准的数据库驱动程序原生运行。我们支持所有主流的 **[PostgreSQL](/docs/get-started-postgresql)**、**[MySQL](/docs/get-started-mysql)**、**[SQLite](/docs/get-started-sqlite)** 或 **[SingleStore](/docs/get-started-singlestore)** 驱动程序，并且我们正在**[快速](https://twitter.com/DrizzleORM/status/1653082492742647811?s=20)**添加新的支持。
 
+## 欢迎加入！
+越来越多的公司在生产环境中采用 Drizzle，在开发体验和性能方面都获得了巨大的收益。
 
-## Welcome on board!
-More and more companies are adopting Drizzle in production, experiencing immense benefits in both DX and performance.
+**我们随时准备帮助你，所以不要犹豫，尽管联系我们。我们很乐意协助你的 Drizzle 之旅！**
 
-**We're always there to help, so don't hesitate to reach out. We'll gladly assist you in your Drizzle journey!**
-
-We have an outstanding **[Discord community](https://driz.link/discord)** and welcome all builders to our **[Twitter](https://twitter.com/drizzleorm)**.
+我们有一个出色的 **[Discord 社区](https://driz.link/discord)**，也欢迎所有开发者关注我们的 **[Twitter](https://twitter.com/drizzleorm)**。
   
-Now go build something awesome with Drizzle and your **[PostgreSQL](/docs/get-started-postgresql)**, **[MySQL](/docs/get-started-mysql)** or **[SQLite](/docs/get-started-sqlite)** database. 🚀
+现在就用 Drizzle 和你的 **[PostgreSQL](/docs/get-started-postgresql)**、**[MySQL](/docs/get-started-mysql)** 或 **[SQLite](/docs/get-started-sqlite)** 数据库构建令人惊叹的应用吧。🚀
 
-### Video Showcase
-
-{/* tRPC + NextJS App Router = Simple Typesafe APIs
-Jack Herrington 19:17
-https://www.youtube.com/watch?v=qCLV0Iaq9zU */}
-{/* https://www.youtube.com/watch?v=qDunJ0wVIec */}
-{/* https://www.youtube.com/watch?v=NZpPMlSAez0 */}
-
- {/* https://www.youtube.com/watch?v=-A0kMiJqQRY */}
-
-<YoutubeCards cards={[
-	{
-		id: "vyU5mJGCJMw",
-		title: "Full Drizzle Course for Beginners",
-		description: "Code Genix",
-		time: "1:37:39",
-	},
-	{
-		id: "7-NZ0MlPpJA",
-		title: "Learn Drizzle In 60 Minutes",
-		description: "Web Dev Simplified",
-		time: "56:09"
-	},
-	{
-		id: "i_mAHOhpBSA",
-		title: "Drizzle ORM in 100 Seconds",
-		description: "Fireship",
-		time: "2:55"
-	},
-	{
-		id: "hIYNOiZXQ7Y",
-		title: "Learn Drizzle ORM in 13 mins (crash course)",
-		description: "Neon",
-		time: "14:00"
-	},
-	{
-		id: "4ZhtoOFKFP8",
-		title: "Easiest Database Setup in Next.js&nbsp;14 with Turso&nbsp;&&nbsp;Drizzle",
-		description: "Sam Meech-Ward",
-		time: '38:08'
-	}, 
-	{
-		id: "NfVELsEZFsA",
-		title: "Next.js Project with Vercel, Neon, Drizzle, TailwindCSS, FlowBite and more!",
-		description: "CodingEntrepreneurs",
-		time: '5:46:28'
-	}, 
-	{
-		id: "_SLxGYzv6jo",
-		title: "I Have A New Favorite Database&nbsp;Tool",
-		description: "Theo - t3.gg",
-		time: '5:46'
-	}, 
-	{
-		id: "Qo-RXkSwOtc",
-		title: "Drizzle ORM First impressions - migrations, relations, queries!",
-		description: "Marius Espejo",
-		time: '33:52'
-	},
-	{
-		id: "yXNEqyvA0OY",
-		title: "I want to learn Drizzle ORM, so I'm starting another next14 project",
-		description: "Web Dev Cody",
-		time: "9:00"
-	},
-	{
-		id: "h7vVhR-dFYo",
-		title: "Picking an ORM is Getting Harder...",
-		description: "Ben Davis",
-		time: "5:18"
-	},
-	{
-		id: "8met6WTk0mQ",
-		title: "This New Database Tool is a Game-Changer",
-		description: "Josh tried coding",
-		time: "8:49"
-	},
-	{
-		id: "woWW1T9DXEY",
-		title: "My Favorite Database Tool Just Got EVEN Better",
-		description: "Josh tried coding",
-		time: "4:23"
-	},
-	{
-		id: "A3l6YYkXzzg",
-		title: "SaaS Notion Clone with Realtime cursors, Nextjs 13, Stripe, Drizzle ORM, Tailwind, Supabase, Sockets",
-		description: "Web Prodigies",
-		time: "11:41:46"
-	},
-	{
-		id: "EQfaw5bDE1s",
-		title: "SvelteKit + Drizzle Code Breakdown",
-		description: "Ben Davis",
-		time: "12:18"
-	},
-	{
-		id: "b6VhN_HHDiQ",
-		title: "Build a Multi-Tenanted, Role-Based Access Control System",
-		description: "TomDoesTech",
-		time: "2:01:29"
-	},
-	{
-		id: "3tl9XCiQErA",
-		title: "The Prisma killer is finally here",
-		description: "SST",
-		time: "5:42"
-	},
-	{
-		id: "VQFjyEa8vGE",
-		title: "Learning Drizzle ORM and working on a next14 project",
-		description: "Web Dev Cody",
-		time: "1:07:41"
-	},
-	{
-		id: "5G0upg4sxgE",
-		title: "This Trick Makes My Favorite Database Tool Even Better",
-		description: "Josh tried coding",
-		time: "6:01"
-	},
-	{
-		id: "-JnEuvPmt-Q",
-		title: "Effortless Auth in Next.js 14: Use Auth.js & Drizzle ORM for Secure Login",
-		description: "Sam Meech-Ward",
-		time: "26:29"
-	},
-]} />

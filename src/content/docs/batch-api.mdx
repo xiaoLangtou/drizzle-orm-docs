@@ -1,26 +1,25 @@
 import Tab from '@mdx/Tab.astro';
 import Tabs from '@mdx/Tabs.astro';
 
-# Batch API
+# 批处理 API
 
-**LibSQL Batch API explanation**:
-_[source](https://docs.turso.tech/sdk/ts/reference#batch-transactions)_
+**LibSQL 批处理 API 说明**：
+_[来源](https://docs.turso.tech/sdk/ts/reference#batch-transactions)_
 
-> With the libSQL client library, a batch is one or more SQL statements executed in order in an implicit transaction. 
-The transaction is controlled by the libSQL backend. If all of the statements are successful, 
-the transaction is committed. If any of the statements fail, the entire transaction is rolled back and no changes are made.
+> 使用 libSQL 客户端库，批处理是在隐式事务中按顺序执行的一个或多个 SQL 语句。
+事务由 libSQL 后端控制。如果所有语句都执行成功，
+事务就会提交。如果任何语句失败，整个事务都会回滚，不会进行任何更改。
 
-**D1 Batch API explanation**:
-_[source](https://developers.cloudflare.com/d1/worker-api/d1-database/#batch)_
+**D1 批处理 API 说明**：
+_[来源](https://developers.cloudflare.com/d1/worker-api/d1-database/#batch)_
 
-> Batching sends multiple SQL statements inside a single call to the database. 
-This can have a huge performance impact as it reduces latency from network round trips to D1. 
-D1 operates in auto-commit. Our implementation guarantees that each statement in the list will execute and commit,
-sequentially, non-concurrently.
-Batched statements are SQL transactions. If a statement in the sequence fails, 
-then an error is returned for that specific statement, and it aborts or rolls back the entire sequence.
+> 批处理在单个数据库调用中发送多个 SQL 语句。
+这可以产生巨大的性能影响，因为它减少了与 D1 的网络往返延迟。
+D1 以自动提交模式运行。我们的实现保证列表中的每个语句都会按顺序、非并发地执行和提交。
+批处理语句是 SQL 事务。如果序列中的某个语句失败，
+则会为该特定语句返回错误，并中止或回滚整个序列。
 
-Drizzle ORM provides APIs to run SQL statements in batch for `LibSQL`, `Neon` and `D1`:
+Drizzle ORM 为 `LibSQL`、`Neon` 和 `D1` 提供了批处理运行 SQL 语句的 API：
 ```ts
 const batchResponse: BatchResponse = await db.batch([
 	db.insert(usersTable).values({ id: 1, name: 'John' }).returning({ id: usersTable.id }),
@@ -30,7 +29,7 @@ const batchResponse: BatchResponse = await db.batch([
 	db.select({ id: usersTable.id, invitedBy: usersTable.invitedBy }).from(usersTable),
 ]);
 ```
-Type for `batchResponse` in this example would be:
+此示例中 `batchResponse` 的类型为：
 <Tabs items={["libSQL", "Neon", "D1"]}>
 <Tab>
 ```ts
@@ -112,7 +111,7 @@ type BatchResponse = [
 </Tab>
 </Tabs>
 
-All possible builders that can be used inside `db.batch`:
+所有可以在 `db.batch` 中使用的构建器：
 ```ts
 db.all(),
 db.get(),

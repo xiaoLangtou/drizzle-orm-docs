@@ -1,5 +1,5 @@
 ---
-title: SQL Limit/Offset pagination
+title: SQL Limit/Offset 分页
 slug: limit-offset-pagination
 ---
 
@@ -12,13 +12,13 @@ import IsSupportedChipGroup from "@mdx/IsSupportedChipGroup.astro";
 <IsSupportedChipGroup chips={{PostgreSQL: true, MySQL: true, SQLite: true}}/>
 
 <Prerequisites>
-- Get started with [PostgreSQL](/docs/get-started-postgresql), [MySQL](/docs/get-started-mysql) and [SQLite](/docs/get-started-sqlite)
-- [Select statement](/docs/select) with [order by clause](/docs/select#order-by) and [limit & offset clauses](/docs/select#limit--offset)
-- [Relational queries](/docs/rqb) with [order by clause](/docs/rqb#order-by) and [limit & offset clauses](/docs/rqb#limit--offset)
-- [Dynamic query building](/docs/dynamic-query-building)
+- 从 [PostgreSQL](/docs/get-started-postgresql)、[MySQL](/docs/get-started-mysql) 和 [SQLite](/docs/get-started-sqlite) 开始
+- 带有 [order by 子句](/docs/select#order-by) 和 [limit & offset 子句](/docs/select#limit--offset) 的 [Select 语句](/docs/select)
+- 带有 [order by 子句](/docs/rqb#order-by) 和 [limit & offset 子句](/docs/rqb#limit--offset) 的 [关系查询](/docs/rqb)
+- [动态查询构建](/docs/dynamic-query-building)
 </Prerequisites>
 
-This guide demonstrates how to implement `limit/offset` pagination in Drizzle:
+本指南演示如何在 Drizzle 中实现 `limit/offset` 分页：
 
 <CodeTabs items={["index.ts", "schema.ts"]}>
   <CodeTab>
@@ -31,9 +31,9 @@ This guide demonstrates how to implement `limit/offset` pagination in Drizzle:
     await db
       .select()
       .from(users)
-      .orderBy(asc(users.id)) // order by is mandatory
-      .limit(4) // the number of rows to return
-      .offset(4); // the number of rows to skip
+      .orderBy(asc(users.id)) // order by 是必需的
+      .limit(4) // 要返回的行数
+      .offset(4); // 要跳过的行数
     ```
 
     ```sql
@@ -41,7 +41,7 @@ This guide demonstrates how to implement `limit/offset` pagination in Drizzle:
     ```
 
     ```ts
-    // 5-8 rows returned
+    // 返回第 5-8 行
     [
       {
         id: 5,
@@ -106,12 +106,12 @@ This guide demonstrates how to implement `limit/offset` pagination in Drizzle:
   </CodeTab>
 </CodeTabs>
 
-Limit is the number of rows to return `(page size)` and offset is the number of rows to skip `((page number - 1) * page size)`. 
-For consistent pagination, ensure ordering by a unique column. Otherwise, the results can be inconsistent.
+Limit 是要返回的行数（`页面大小`），offset 是要跳过的行数（`(页码 - 1) * 页面大小`）。
+为了保持分页的一致性，请确保按唯一列排序。否则，结果可能会不一致。
 
-If you need to order by a non-unique column, you should also append a unique column to the ordering.
+如果你需要按非唯一列排序，你还应该在排序中添加一个唯一列。
 
-This is how you can implement `limit/offset` pagination with 2 columns:
+这是如何使用 2 列实现 `limit/offset` 分页：
 
 <Section>
 ```ts copy {5}
@@ -119,7 +119,7 @@ const getUsers = async (page = 1, pageSize = 3) => {
   await db
     .select()
     .from(users)
-    .orderBy(asc(users.firstName), asc(users.id)) // order by first_name (non-unique), id (pk)
+    .orderBy(asc(users.firstName), asc(users.id)) // 按 first_name（非唯一）和 id（主键）排序
     .limit(pageSize) 
     .offset((page - 1) * pageSize);
 }
@@ -128,7 +128,7 @@ await getUsers();
 ```
 </Section>
 
-Drizzle has useful relational queries API, that lets you easily implement `limit/offset` pagination:
+Drizzle 有实用的关系查询 API，让你可以轻松实现 `limit/offset` 分页：
 
 <Section>
 ```ts copy {7,8,9}
@@ -148,7 +148,7 @@ await getUsers();
 ```
 </Section>
 
-Drizzle has simple and flexible API, which lets you easily create custom solutions. This is how you can create custom function for pagination using `.$dynamic()` function:
+Drizzle 有简单且灵活的 API，让你可以轻松创建自定义解决方案。这是如何使用 `.$dynamic()` 函数创建自定义分页函数：
 
 <Section>
 ```ts copy {11,12,13,16}
@@ -167,16 +167,16 @@ function withPagination<T extends PgSelect>(
     .offset((page - 1) * pageSize);
 }
 
-const query = db.select().from(users); // query that you want to execute with pagination
+const query = db.select().from(users); // 你想要执行分页的查询
 
 await withPagination(query.$dynamic(), asc(users.id));
 ```
 
 </Section>
 
-You can improve performance of `limit/offset` pagination by using `deferred join` technique. This method performs the pagination on a subset of the data instead of the entire table.
+你可以通过使用 `deferred join` 技术来提高 `limit/offset` 分页的性能。这种方法在数据的子集而不是整个表上执行分页。
 
-To implement it you can do like this:
+实现方法如下：
 
 ```ts copy {10}
 const getUsers = async (page = 1, pageSize = 10) => {
@@ -192,11 +192,11 @@ const getUsers = async (page = 1, pageSize = 10) => {
 };
 ```
 
-**Benefits** of `limit/offset` pagination: it's simple to implement and pages are easily reachable, which means that you can navigate to any page without having to save the state of the previous pages.
+`limit/offset` 分页的**优点**：实现简单，页面容易访问，这意味着你可以导航到任何页面而无需保存前面页面的状态。
 
-**Drawbacks** of `limit/offset` pagination: degradation in query performance with increasing offset because database has to scan all rows before the offset to skip them, and inconsistency due to data shifts, which can lead to the same row being returned on different pages or rows being skipped.
+`limit/offset` 分页的**缺点**：随着偏移量的增加，查询性能会下降，因为数据库必须扫描偏移量之前的所有行才能跳过它们，并且由于数据变化可能导致不一致性，这可能导致同一行在不同页面上返回或行被跳过。
 
-This is how it works:
+这是它的工作原理：
 
 <Section>
 ```ts copy
@@ -209,12 +209,12 @@ const getUsers = async (page = 1, pageSize = 3) => {
     .offset((page - 1) * pageSize);
 };
 
-// user is browsing the first page
+// 用户正在浏览第一页
 await getUsers();
 ```
 
 ```ts
-// results for the first page
+// 第一页的结果
 [
   {
     id: 1,
@@ -238,15 +238,15 @@ await getUsers();
 ```
 
 ```ts
-// while user is browsing the first page, a row with id 2 is deleted
+// 当用户正在浏览第一页时，id 为 2 的行被删除
 await db.delete(users).where(eq(users.id, 2));
 
-// user navigates to the second page
+// 用户导航到第二页
 await getUsers(2);
 ```
 
 ```ts
-// second page, row with id 3 was skipped
+// 第二页，id 为 3 的行被跳过
 [
   {
     id: 5,
@@ -270,6 +270,6 @@ await getUsers(2);
 ```
 </Section>
 
-So, if your database experiences frequently insert and delete operations in real time or you need high performance to paginate large tables, you should consider using [cursor-based](/docs/guides/cursor-based-pagination) pagination instead.
+因此，如果你的数据库经常实时插入和删除操作，或者你需要对大表进行高性能分页，你应该考虑使用 [基于游标的](/docs/guides/cursor-based-pagination) 分页。
 
-To learn more about `deferred join` technique you should follow these guides: [Planetscale Pagination Guide](https://planetscale.com/blog/mysql-pagination) and [Efficient Pagination Guide by Aaron Francis](https://aaronfrancis.com/2022/efficient-pagination-using-deferred-joins).
+要了解更多关于 `deferred join` 技术的信息，你应该参考这些指南：[Planetscale 分页指南](https://planetscale.com/blog/mysql-pagination) 和 [Aaron Francis 的高效分页指南](https://aaronfrancis.com/2022/efficient-pagination-using-deferred-joins)。

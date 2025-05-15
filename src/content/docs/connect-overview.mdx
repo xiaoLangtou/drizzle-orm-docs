@@ -11,8 +11,8 @@ import Section from "@mdx/Section.astro";
 import LinksList from "@mdx/LinksList.astro"
 import Flex from "@mdx/Flex.astro"
 
-# Database connection with Drizzle
-Drizzle ORM runs SQL queries on your database via **database drivers**.
+# 使用 Drizzle 连接数据库
+Drizzle ORM 通过**数据库驱动**在你的数据库上运行 SQL 查询。
 <CodeTabs items={["index.ts", "schema.ts"]}>
 
 <CodeTab>
@@ -25,21 +25,21 @@ const usersCount = await db.$count(users);
 ```
 ```  
                         ┌──────────────────────┐
-                        │   db.$count(users)   │ <--- drizzle query
+                        │   db.$count(users)   │ <--- drizzle 查询
                         └──────────────────────┘     
                             │               ʌ
 select count(*) from users -│               │
                             │               │- [{ count: 0 }]
                             v               │
                          ┌─────────────────────┐
-                         │    node-postgres    │ <--- database driver
+                         │    node-postgres    │ <--- 数据库驱动
                          └─────────────────────┘
                             │               ʌ
 01101000 01100101 01111001 -│               │
                             │               │- 01110011 01110101 01110000
                             v               │
                          ┌────────────────────┐
-                         │      Database      │ 
+                         │      数据库        │ 
                          └────────────────────┘
 ```
 </CodeTab>
@@ -54,7 +54,7 @@ export const users = pgTable("users", {
 ```
 </CodeTabs>
 
-Under the hood Drizzle will create a **node-postgres** driver instance which you can access via `db.$client` if necessary
+在底层，Drizzle 将创建一个 **node-postgres** 驱动实例，如果需要，你可以通过 `db.$client` 访问它
 <Section>
 ```ts
 import { drizzle } from "drizzle-orm/node-postgres"
@@ -63,7 +63,7 @@ const db = drizzle(process.env.DATABASE_URL);
 const pool = db.$client;
 ```
 ```ts
-// above is equivalent to
+// 上面的代码等同于
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 
@@ -74,7 +74,7 @@ const db = drizzle({ client: pool });
 ```
 </Section>
 
-Drizzle is by design natively compatible with every **edge** or **serverless** runtime, whenever you'd need access to a serverless database - we've got you covered
+Drizzle 在设计上原生兼容每个**边缘**或**无服务器**运行时，无论你何时需要访问无服务器数据库 - 我们都能满足你的需求
 
 <CodeTabs items={["Neon HTTP", "Neon with websockets", "Vercel Postgres", "PlanetScale HTTP", "Cloudflare d1"]}>
 ```ts
@@ -104,12 +104,12 @@ const db = drizzle({ connection: env.DB });
 ```
 </CodeTabs>
 
-And yes, we do support runtime specific drivers like [Bun SQLite](/docs/connect-bun-sqlite) or [Expo SQLite](/docs/connect-expo-sqlite):
+是的，我们也支持运行时特定的驱动，如 [Bun SQLite](/docs/connect-bun-sqlite) 或 [Expo SQLite](/docs/connect-expo-sqlite)：
 <Section>
 ```ts
 import { drizzle } from "drizzle-orm/bun-sqlite"
 
-const db = drizzle(); // <--- will create an in-memory db
+const db = drizzle(); // <--- 将创建一个内存数据库
 const db = drizzle("./sqlite.db");
 ```
 ```ts
@@ -121,24 +121,24 @@ const db = drizzle(expo);
 ```
 </Section>
 
-#### Database connection URL
-Just in case if you're not familiar with database connection URL concept
+#### 数据库连接 URL
+如果你不熟悉数据库连接 URL 的概念，这里有一个示例
 ```
 postgresql://alex:AbC123dEf@ep-cool-darkness-123456.us-east-2.aws.neon.tech/dbname
              └──┘ └───────┘ └─────────────────────────────────────────────┘ └────┘
               ʌ    ʌ          ʌ                                              ʌ
-        role -│    │          │- hostname                                    │- database
+        角色 -│    │          │- 主机名                                      │- 数据库
                    │
-                   │- password
+                   │- 密码
 
 ```
-#### Next steps
-Feel free to check out per-driver documentations  
+#### 下一步
+请查看各个驱动的具体文档
 
 <rem/>
 <Flex>
   <LinksList 
-    title='PostgreSQL drivers'
+    title='PostgreSQL 驱动'
     links={[
         ["PostgreSQL", "/docs/get-started-postgresql"], 
         ["Neon", "/docs/connect-neon"], 
@@ -149,7 +149,7 @@ Feel free to check out per-driver documentations
       ]}
   />
   <LinksList 
-    title='MySQL drivers'
+    title='MySQL 驱动'
     links={[
         ["MySQL", "/docs/get-started-mysql"], 
         ["PlanetsScale", "/docs/connect-planetscale"], 
@@ -157,7 +157,7 @@ Feel free to check out per-driver documentations
       ]}
   />
   <LinksList 
-  title='SQLite drivers'
+  title='SQLite 驱动'
   links={[
       ["SQLite", "/docs/get-started-sqlite"], 
       ["Turso", "/docs/connect-turso"], 
@@ -166,7 +166,7 @@ Feel free to check out per-driver documentations
     ]}
   />
   <LinksList 
-  title='Native SQLite'
+  title='原生 SQLite'
   links={[
       ["Expo SQLite", "/docs/get-started/expo-new"], 
       ["OP SQLite", "/docs/connect-op-sqlite"], 
@@ -174,10 +174,9 @@ Feel free to check out per-driver documentations
     ]}
   />
   <LinksList 
-  title='Others'
+  title='其他'
   links={[
       ["Drizzle Proxy", "/docs/connect-drizzle-proxy"], 
     ]}
   />
 </Flex>
-{/* TODO: @AndriiSherman ["AWS Data API", "/docs/get-started/aws-data-api"],  */}

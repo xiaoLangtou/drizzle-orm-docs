@@ -1,5 +1,5 @@
 ---
-title: Seeding Partially Exposed Tables with Foreign Key
+title: 使用部分暴露的表进行带外键的种子填充
 slug: seeding-with-partially-exposed-tables
 ---
 
@@ -12,12 +12,12 @@ import Callout from '@mdx/Callout.astro';
 <IsSupportedChipGroup chips={{PostgreSQL: true, MySQL: true, SQLite: true}}/>
 
 <Prerequisites>
-- Get started with [PostgreSQL](/docs/get-started-postgresql), [MySQL](/docs/get-started-mysql) or [SQLite](/docs/get-started-sqlite)
-- Get familiar with [Drizzle Seed](/docs/seed-overview)
+- 开始使用 [PostgreSQL](/docs/get-started-postgresql)、[MySQL](/docs/get-started-mysql) 或 [SQLite](/docs/get-started-sqlite)
+- 熟悉 [Drizzle种子填充](/docs/seed-overview)
 </Prerequisites>
 
-## Example 1
-Let's assume you are trying to seed your database using the seeding script and schema shown below.
+## 示例1
+假设你正在使用下面显示的种子填充脚本和schema尝试填充数据库。
 <CodeTabs items={["index.ts", "schema.ts"]}>
 <CodeTab>
 ```ts
@@ -48,28 +48,28 @@ export const bloodPressure = pgTable("bloodPressure", {
 ```
 </CodeTab>
 </CodeTabs>
-If the `bloodPressure` table has a not-null constraint on the `userId` column, running the seeding script will cause an error.
+如果`bloodPressure`表的`userId`列有非空约束，运行种子填充脚本将导致错误。
 
 ```
 Error: Column 'userId' has not null constraint, 
 and you didn't specify a table for foreign key on column 'userId' in 'bloodPressure' table.
 ```
 
-<Callout title='What does it mean?'>
-This means we can't fill the `userId` column with Null values due to the not-null constraint on that column. 
-Additionally, you didn't expose the `users` table to the `seed` function schema, so we can't generate `users.id` to populate the `userId` column with these values.
+<Callout title='这是什么意思？'>
+这意味着由于`userId`列的非空约束，我们不能用Null值填充该列。
+另外，你没有在`seed`函数schema中暴露`users`表，所以我们无法生成`users.id`来用这些值填充`userId`列。
 </Callout>
 
 
-At this point, you have several options to resolve the error:
-- You can remove the not-null constraint from the `userId` column;
-- You can expose `users` table to `seed` function schema
+此时，你有几个选项可以解决这个错误：
+- 你可以从`userId`列移除非空约束；
+- 你可以在`seed`函数schema中暴露`users`表
 ```ts 
 await seed(db, { bloodPressure, users });
 ```
-- You can [refine](/docs/guides/seeding-with-partially-exposed-tables#refining-the-userid-column-generator) the `userId` column generator;
+- 你可以[优化](/docs/guides/seeding-with-partially-exposed-tables#优化-userid-列生成器)`userId`列生成器；
 
-## Example 2
+## 示例2
 
 <CodeTabs items={["index.ts", "schema.ts"]}>
 <CodeTab>
@@ -102,23 +102,23 @@ export const bloodPressure = pgTable("bloodPressure", {
 </CodeTab>
 </CodeTabs>
 
-By running the seeding script above you will see a warning
+运行上述种子填充脚本你将看到一个警告
 ```
 Column 'userId' in 'bloodPressure' table will be filled with Null values
 because you specified neither a table for foreign key on column 'userId' 
 nor a function for 'userId' column in refinements.
 ```
-<Callout title='What does it mean?'>
-This means you neither provided the `users` table to the `seed` function schema nor refined the `userId` column generator. 
-As a result, the `userId` column will be filled with Null values.
+<Callout title='这是什么意思？'>
+这意味着你既没有在`seed`函数schema中提供`users`表，也没有优化`userId`列生成器。
+因此，`userId`列将被填充为Null值。
 </Callout>
-Then you will have two choices:
-- If you're okay with filling the `userId` column with Null values, you can ignore the warning;
+然后你将有两个选择：
+- 如果你不介意用Null值填充`userId`列，你可以忽略这个警告；
 
-- Otherwise, you can [refine](/docs/guides/seeding-with-partially-exposed-tables#refining-the-userid-column-generator) the `userId` column generator. 
+- 否则，你可以[优化](/docs/guides/seeding-with-partially-exposed-tables#优化-userid-列生成器)`userId`列生成器。
 
-## Refining the `userId` column generator
-Doing so requires the `users` table to already have IDs such as 1 and 2 in the database.
+## 优化`userId`列生成器
+这样做需要`users`表在数据库中已经有ID（如1和2）。
 <CodeTabs items={["index.ts"]}>
 <CodeTab>
 ```ts copy {8}

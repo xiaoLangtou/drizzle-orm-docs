@@ -1,5 +1,5 @@
 ---
-title: SQL Toggle value
+title: SQL切换值
 slug: toggling-a-boolean-field
 ---
 import Section from "@mdx/Section.astro";
@@ -9,13 +9,13 @@ import Prerequisites from "@mdx/Prerequisites.astro";
 <IsSupportedChipGroup chips={{PostgreSQL: true, MySQL: true, SQLite: true}}/>
 
 <Prerequisites>
-- Get started with [PostgreSQL](/docs/get-started-postgresql), [MySQL](/docs/get-started-mysql) and [SQLite](/docs/get-started-sqlite)
-- [Update statement](/docs/update)
-- [Filters](/docs/operators) and [not operator](/docs/operators#not)
-- Boolean data type in [MySQL](/docs/column-types/mysql#boolean) and [SQLite](/docs/column-types/sqlite#boolean)
+- 开始使用 [PostgreSQL](/docs/get-started-postgresql)、[MySQL](/docs/get-started-mysql) 和 [SQLite](/docs/get-started-sqlite)
+- [Update语句](/docs/update)
+- [过滤操作符](/docs/operators) 和 [not操作符](/docs/operators#not)
+- [MySQL](/docs/column-types/mysql#boolean) 和 [SQLite](/docs/column-types/sqlite#boolean) 中的布尔数据类型
 </Prerequisites>
 
-To toggle a column value you can use `update().set()` method like below:
+要切换列值，你可以像下面这样使用`update().set()`方法：
 
 <Section>
 ```tsx copy {8}
@@ -36,6 +36,6 @@ update "table" set "is_active" = not "is_active" where "id" = 1;
 ```
 </Section>
 
-Please note that there is no boolean type in MySQL and SQLite.
-MySQL uses tinyint(1).
-SQLite uses integers 0 (false) and 1 (true). 
+请注意，MySQL和SQLite中没有布尔类型。
+MySQL使用tinyint(1)。
+SQLite使用整数0（false）和1（true）。

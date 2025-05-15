@@ -7,28 +7,27 @@ import Section from '@mdx/Section.astro';
 import Flex from "@mdx/Flex.astro"
 import LinksList from "@mdx/LinksList.astro"
 
-# Drizzle schema
+# Drizzle Schema
 
-Drizzle lets you define a schema in TypeScript with various models and properties supported by the underlying database. 
-When you define your schema, it serves as the source of truth for future modifications in queries (using Drizzle-ORM)
-and migrations (using Drizzle-Kit).
+Drizzle 允许你使用 TypeScript 定义数据库 schema，支持底层数据库的各种模型和属性。
+当你定义 schema 时，它将作为后续修改查询（使用 Drizzle-ORM）和迁移（使用 Drizzle-Kit）的真实来源。
 
 <Callout> 
-If you are using Drizzle-Kit for the migration process, make sure to export all the models defined in your schema files so that Drizzle-Kit can import them and use them in the migration diff process. 
+如果你正在使用 Drizzle-Kit 进行迁移过程，请确保导出 schema 文件中定义的所有模型，以便 Drizzle-Kit 可以导入它们并在迁移差异过程中使用它们。
 </Callout>
 
-## Organize your schema files 
-You can declare your SQL schema directly in TypeScript either in a single `schema.ts` file,
-or you can spread them around — whichever you prefer, all the freedom!
+## 组织你的 schema 文件
+你可以直接在 TypeScript 中声明你的 SQL schema，可以放在单个 `schema.ts` 文件中，
+也可以分散在多个文件中 — 完全由你决定，拥有充分的自由！
 
-#### Schema in 1 file
-The most common way to declare your schema with Drizzle is to put all your tables into one `schema.ts` file.
+#### 单文件 Schema
+使用 Drizzle 声明 schema 最常见的方式是将所有表放在一个 `schema.ts` 文件中。
 
-> Note: You can name your schema file whatever you like. For example, it could be `models.ts`, or something else.
+> 注意：你可以随意命名你的 schema 文件。例如，它可以是 `models.ts`，或者其他名称。
 
-This approach works well if you don't have too many table models defined, or if you're okay with keeping them all in one file
+如果你的表模型定义不是太多，或者你不介意将它们都放在一个文件中，这种方法就很合适。
 
-Example:
+示例：
     ```plaintext
 📦 <project root>
  └ 📂 src
@@ -36,9 +35,9 @@ Example:
        └ 📜 schema.ts
     ```
 
-In the `drizzle.config.ts` file, you need to specify the path to your schema file. With this configuration, Drizzle will 
-read from the `schema.ts` file and use this information during the migration generation process. For more information 
-about the `drizzle.config.ts` file and migrations with Drizzle, please check: [link](/docs/drizzle-config-file)
+在 `drizzle.config.ts` 文件中，你需要指定 schema 文件的路径。通过这个配置，Drizzle 将
+从 `schema.ts` 文件中读取信息，并在迁移生成过程中使用这些信息。有关 `drizzle.config.ts` 文件
+和 Drizzle 迁移的更多信息，请查看：[链接](/docs/drizzle-config-file)
 ```ts
 import { defineConfig } from "drizzle-kit";
 
@@ -48,13 +47,12 @@ export default defineConfig({
 })
 ```
 
-#### Schema in multiple files
+#### 多文件 Schema
 
-You can place your Drizzle models — such as tables, enums, sequences, etc. — not only in one file but in any file you prefer. 
-The only thing you must ensure is that you export all the models from those files so that the Drizzle kit can import 
-them and use them in migrations.
+你可以将 Drizzle 模型（如表、枚举、序列等）不仅放在一个文件中，还可以放在任何你喜欢的文件中。
+唯一需要确保的是从这些文件中导出所有模型，以便 Drizzle kit 可以导入它们并在迁移中使用它们。
 
-One use case would be to separate each table into its own file.
+一个用例是将每个表分离到它自己的文件中。
 ```plaintext
 📦 <project root>
  └ 📂 src
@@ -68,9 +66,9 @@ One use case would be to separate each table into its own file.
           └ 📜 etc.ts
 ```
 
-In the `drizzle.config.ts` file, you need to specify the path to your schema folder. With this configuration, Drizzle will 
-read from the `schema` folder and find all the files recursively and get all the drizzle tables from there. For more information 
-about the `drizzle.config.ts` file and migrations with Drizzle, please check: [link](/docs/drizzle-config-file)
+在 `drizzle.config.ts` 文件中，你需要指定 schema 文件夹的路径。通过这个配置，Drizzle 将
+递归读取 `schema` 文件夹中的所有文件，并从中获取所有 drizzle 表。有关 `drizzle.config.ts` 文件
+和 Drizzle 迁移的更多信息，请查看：[链接](/docs/drizzle-config-file)
 
 ```ts
 import { defineConfig } from "drizzle-kit";
@@ -81,7 +79,7 @@ export default defineConfig({
 })
 ```
 
-You can also group them in any way you like, such as creating groups for user-related tables, messaging-related tables, product-related tables, etc. 
+你也可以按照任何你喜欢的方式对它们进行分组，比如创建用户相关表、消息相关表、产品相关表等的分组。
 ```plaintext
 📦 <project root>
  └ 📂 src
@@ -92,9 +90,9 @@ You can also group them in any way you like, such as creating groups for user-re
           └ 📜 products.ts
 ```
 
-In the `drizzle.config.ts` file, you need to specify the path to your schema file. With this configuration, Drizzle will 
-read from the `schema.ts` file and use this information during the migration generation process. For more information 
-about the `drizzle.config.ts` file and migrations with Drizzle, please check: [link](/docs/drizzle-config-file)
+在 `drizzle.config.ts` 文件中，你需要指定 schema 文件的路径。通过这个配置，Drizzle 将
+从 `schema.ts` 文件中读取信息，并在迁移生成过程中使用这些信息。有关 `drizzle.config.ts` 文件
+和 Drizzle 迁移的更多信息，请查看：[链接](/docs/drizzle-config-file)
 
 ```ts
 import { defineConfig } from "drizzle-kit";
@@ -105,23 +103,23 @@ export default defineConfig({
 })
 ```
 
-## Shape your data schema
+## 构建你的数据 schema
 
-Drizzle schema consists of several model types from database you are using. With drizzle you can specify:
-- Tables with columns, constraints, etc.
-- Schemas(PostgreSQL only)
-- Enums
-- Sequences(PostgreSQL only)
-- Views
-- Materialized Views
-- etc.
+Drizzle schema 由你使用的数据库的几种模型类型组成。使用 drizzle，你可以指定：
+- 带有列、约束等的表
+- Schemas（仅限 PostgreSQL）
+- 枚举
+- 序列（仅限 PostgreSQL）
+- 视图
+- 物化视图
+- 等等
 
-Let's go one by one and check how the schema should be defined with drizzle
+让我们逐一查看如何使用 drizzle 定义 schema
 
-#### **Tables and columns declaration** 
+#### **表和列的声明** 
 
-A table in Drizzle should be defined with at least 1 column, the same as it should be done in database. There is one important thing to know,
-there is no such thing as a common table object in drizzle. You need to choose a dialect you are using, PostgreSQL, MySQL or SQLite
+Drizzle 中的表必须至少定义 1 列，就像在数据库中应该做的那样。有一个重要的事情需要知道，
+drizzle 中没有通用的表对象。你需要选择你正在使用的方言，PostgreSQL、MySQL 或 SQLite
 
 ![](@/assets/images/table-structure.svg)
 
@@ -149,15 +147,15 @@ export const users = sqliteTable('users', {
 ```
 </CodeTabs>
 
-By default, Drizzle will use the TypeScript key names for columns in database queries. 
-Therefore, the schema and query from the example will generate the SQL query shown below
+默认情况下，Drizzle 将在数据库查询中使用 TypeScript 键名作为列名。
+因此，示例中的 schema 和查询将生成如下所示的 SQL 查询
 
 <Callout>
-This example uses a db object, whose initialization is not covered in this part of the documentation. To learn how to connect to the database, please refer to the [Connections Docs](/docs/get-started-postgresql)
+本示例使用 db 对象，其初始化未在本文档的这部分中涉及。要了解如何连接到数据库，请参考 [连接文档](/docs/get-started-postgresql)
 </Callout>
 
 \
-**TypeScript key = database key**
+**TypeScript 键 = 数据库键**
 <Section>
 ```ts
 // schema.ts
@@ -177,7 +175,7 @@ SELECT "id", "first_name" from users;
 ```
 </Section>
 
-If you want to use different names in your TypeScript code and in the database, you can use column aliases
+如果你想在 TypeScript 代码和数据库中使用不同的名称，你可以使用列别名
 
 <Section>
 ```ts
@@ -198,14 +196,14 @@ SELECT "id", "first_name" from users;
 ```
 </Section>
 
-### Camel and Snake casing
+### 驼峰命名和下划线命名
 
-Database model names often use `snake_case` conventions, while in TypeScript, it is common to use `camelCase` for naming models. 
-This can lead to a lot of alias definitions in the schema. To address this, Drizzle provides a way to automatically 
-map `camelCase` from TypeScript to `snake_case` in the database by including one optional parameter during Drizzle database initialization
+数据库模型名称通常使用 `snake_case` 约定，而在 TypeScript 中，通常使用 `camelCase` 来命名模型。
+这可能导致需要在 schema 中定义大量的别名。为了解决这个问题，Drizzle 提供了一种方法，通过在 Drizzle 数据库初始化期间
+包含一个可选参数，自动将 TypeScript 中的 `camelCase` 映射到数据库中的 `snake_case`。
 
-For such mapping, you can use the `casing` option in the Drizzle DB declaration. This parameter will 
-help you specify the database model naming convention and will attempt to map all JavaScript keys accordingly
+对于这种映射，你可以在 Drizzle DB 声明中使用 `casing` 选项。这个参数将
+帮助你指定数据库模型命名约定，并尝试相应地映射所有 JavaScript 键
 
 <Section>
 ```ts
@@ -231,16 +229,16 @@ SELECT "id", "first_name" from users;
 ```
 </Section>
 
-### Advanced
+### 高级用法
 
-There are a few tricks you can use with Drizzle ORM. As long as Drizzle is entirely in TypeScript files, 
-you can essentially do anything you would in a simple TypeScript project with your code.
+你可以在 Drizzle ORM 中使用一些技巧。由于 Drizzle 完全在 TypeScript 文件中，
+你基本上可以像在简单的 TypeScript 项目中那样处理你的代码。
 
-One common feature is to separate columns into different places and then reuse them. 
-For example, consider the `updated_at`, `created_at`, and `deleted_at` columns. Many tables/models may need these 
-three fields to track and analyze the creation, deletion, and updates of entities in a system
+一个常见的功能是将列分离到不同的位置，然后重用它们。
+例如，考虑 `updated_at`、`created_at` 和 `deleted_at` 列。许多表/模型可能需要这些
+三个字段来跟踪和分析系统中实体的创建、删除和更新
 
-We can define those columns in a separate file and then import and spread them across all the table objects you have
+我们可以在单独的文件中定义这些列，然后导入并将它们分散到你拥有的所有表对象中
 
 <Section>
 ```ts
@@ -272,20 +270,20 @@ export const posts = pgTable('posts', {
 <Tabs items={['PostgreSQL', 'MySQL', 'SQLite']}>
 <Tab>
 \
-In PostgreSQL, there is an entity called a `schema` (which we believe should be called `folders`). This creates a structure in PostgreSQL:
+PostgreSQL 中有一个叫做 `schema` 的实体（我们认为应该叫做 `folders`）。这在 PostgreSQL 中创建了一个结构：
 
 ![](@/assets/images/postgresql-db-structure.png)
 
-You can manage your PostgreSQL schemas with `pgSchema` and place any other models inside it.
+你可以使用 `pgSchema` 管理你的 PostgreSQL schemas，并在其中放置任何其他模型。
 
-Define the schema you want to manage using Drizzle
+使用 Drizzle 定义你想要管理的 schema
 ```ts
 import { pgSchema } from "drizzle-orm/pg-core"
 
 export const customSchema = pgSchema('custom');
 ```
 
-Then place the table inside the schema object
+然后将表放在 schema 对象中
 ```ts {5-7}
 import { integer, pgSchema } from "drizzle-orm/pg-core";
 
@@ -298,20 +296,20 @@ export const users = customSchema.table('users', {
 </Tab>
 <Tab>
 \
-In MySQL, there is an entity called `Schema`, but in MySQL terms, this is equivalent to a `Database`. 
+MySQL 中有一个叫做 `Schema` 的实体，但在 MySQL 术语中，这相当于一个 `Database`。
 
-You can define them with `drizzle-orm` and use them in queries, but they won't be detected by `drizzle-kit` or included in the migration flow
+你可以使用 `drizzle-orm` 定义它们并在查询中使用它们，但它们不会被 `drizzle-kit` 检测到或包含在迁移流程中
 
 ![](@/assets/images/mysql-db-structure.png)
 
-Define the schema you want to manage using Drizzle
+使用 Drizzle 定义你想要管理的 schema
 ```ts
 import { mysqlSchema } from "drizzle-orm/mysql-core"
 
 export const customSchema = mysqlSchema('custom');
 ```
 
-Then place the table inside the schema object
+然后将表放在 schema 对象中
 ```ts {5-7}
 import { int, mysqlSchema } from "drizzle-orm/mysql-core";
 
@@ -324,17 +322,17 @@ export const users = customSchema.table('users', {
 </Tab>
 <Tab>
 \
-In SQLite, there is no concept of a schema, so you can only define tables within a single SQLite file context
+SQLite 中没有 schema 的概念，所以你只能在单个 SQLite 文件上下文中定义表
 
 ![](@/assets/images/sqlite-db-structure.png)
 </Tab>
 </Tabs>
 
-### Example
+### 示例
 
-Once you know the basics, let's define a schema example for a real project to get a better view and understanding
+一旦你了解了基础知识，让我们为一个真实项目定义一个 schema 示例，以获得更好的视图和理解
 
-> All examples will use `generateUniqueString`. The implementation for it will be provided after all the schema examples
+> 所有示例都将使用 `generateUniqueString`。其实现将在所有 schema 示例之后提供
 
 <CodeTabs items={['PostgreSQL', 'MySQL', 'SQLite']}>
 ```ts copy
@@ -464,7 +462,7 @@ export const comments = table("comments", {
 ```
 </CodeTabs>
 
-**`generateUniqueString` implementation:**
+**`generateUniqueString` 实现：**
 ```ts
 function generateUniqueString(length: number = 12): string {
   const characters =
@@ -481,26 +479,26 @@ function generateUniqueString(length: number = 12): string {
 ```
 
 
-#### What's next?
+#### 下一步？
 <br/>
 <Flex>
   <LinksList 
-    title='Manage schema'
+    title='管理 schema'
     links={[
-        ["Column types", "/docs/column-types/pg"], 
-        ["Indexes and Constraints", "/docs/indexes-constraints"],
-        ["Database Views", "/docs/views"],
-        ["Database Schemas", "/docs/schemas"],
-        ["Sequences", "/docs/sequences"],
-        ["Extensions", "/docs/extensions/pg"],
+        ["列类型", "/docs/column-types/pg"], 
+        ["索引和约束", "/docs/indexes-constraints"],
+        ["数据库视图", "/docs/views"],
+        ["数据库 Schemas", "/docs/schemas"],
+        ["序列", "/docs/sequences"],
+        ["扩展", "/docs/extensions/pg"],
       ]}
   />
   <LinksList 
-    title='Zero to Hero'
+    title='从零到英雄'
     links={[
-        ["Database connection", "/docs/connect-overview"], 
-        ["Data querying", "/docs/data-querying"], 
-        ["Migrations", "/docs/migrations"], 
+        ["数据库连接", "/docs/connect-overview"], 
+        ["数据查询", "/docs/data-querying"], 
+        ["迁移", "/docs/migrations"], 
       ]}
   />
 </Flex>

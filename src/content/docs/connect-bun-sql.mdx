@@ -6,30 +6,30 @@ import WhatsNextPostgres from "@mdx/WhatsNextPostgres.astro";
 import Prerequisites from "@mdx/Prerequisites.astro";
 import CodeTabs from "@mdx/CodeTabs.astro";
 
-# Drizzle \<\> Bun SQL
+# Drizzle <> Bun SQL</>
 
 <Prerequisites>
-- Database [connection basics](/docs/connect-overview) with Drizzle
-- Bun - [website](https://bun.sh/docs)
-- Bun SQL - native bindings for working with PostgreSQL databases - [read here](https://bun.sh/docs/api/sql)
+- 数据库[连接基础](/docs/connect-overview)与 Drizzle
+- Bun - [官网](https://bun.sh/docs)
+- Bun SQL - 用于操作 PostgreSQL 数据库的原生绑定 - [详情](https://bun.sh/docs/api/sql)
 </Prerequisites>
 
-According to the **[official website](https://bun.sh/)**, Bun is a fast all-in-one JavaScript runtime. 
+根据**[官方网站](https://bun.sh/)**，Bun 是一个快速的全能型 JavaScript 运行时。
 
-Drizzle ORM natively supports **[`bun sql`](https://bun.sh/docs/api/sql)** module and it's crazy fast 🚀  
+Drizzle ORM 原生支持 **[`bun sql`](https://bun.sh/docs/api/sql)** 模块，速度非常快 🚀
 
 <Callout type='error'>
-In version `1.2.0`, Bun has issues with executing concurrent statements, which may lead to errors if you try to run several queries simultaneously.
-We've created a [github issue](https://github.com/oven-sh/bun/issues/16774) that you can track. Once it's fixed, you should no longer encounter any such errors on Bun's SQL side
+在 `1.2.0` 版本中，Bun 在执行并发语句时存在问题，如果你尝试同时运行多个查询，可能会导致错误。
+我们已经创建了一个 [GitHub issue](https://github.com/oven-sh/bun/issues/16774) 供你跟踪。一旦修复，你就不会再遇到 Bun SQL 方面的此类错误
 </Callout>
 
-#### Step 1 - Install packages
+#### 步骤 1 - 安装包
 <Npm>
 drizzle-orm
 -D drizzle-kit
 </Npm>
 
-#### Step 2 - Initialize the driver and make a query
+#### 步骤 2 - 初始化驱动并执行查询
 ```typescript copy
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/bun-sql';
@@ -39,7 +39,7 @@ const db = drizzle(process.env.DATABASE_URL);
 const result = await db.select().from(...);
 ```
 
-If you need to provide your existing driver:
+如果你需要提供你现有的驱动：
 ```typescript copy
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/bun-sql';
@@ -49,6 +49,6 @@ const client = new SQL(process.env.DATABASE_URL!);
 const db = drizzle({ client });
 ```
 
-#### What's next?
+#### 下一步？
 
 <WhatsNextPostgres/>

@@ -6,29 +6,29 @@ import WhatsNextPostgres from "@mdx/WhatsNextPostgres.astro";
 import Prerequisites from "@mdx/Prerequisites.astro";
 import CodeTabs from "@mdx/CodeTabs.astro";
 
-# Drizzle \<\> Bun SQLite
+# Drizzle <> Bun SQLite</>
 
 <Prerequisites>
-- Database [connection basics](/docs/connect-overview) with Drizzle
-- Bun - [website](https://bun.sh/docs)
-- Bun SQLite driver - [docs](https://bun.sh/docs/api/sqlite)
+- 数据库[连接基础](/docs/connect-overview)与 Drizzle
+- Bun - [官网](https://bun.sh/docs)
+- Bun SQLite 驱动 - [文档](https://bun.sh/docs/api/sqlite)
 </Prerequisites>
 
-According to the **[official website](https://bun.sh/)**, Bun is a fast all-in-one JavaScript runtime. 
+根据**[官方网站](https://bun.sh/)**，Bun 是一个快速的全能型 JavaScript 运行时。
 
-Drizzle ORM natively supports **[`bun:sqlite`](https://bun.sh/docs/api/sqlite)** module and it's crazy fast 🚀  
+Drizzle ORM 原生支持 **[`bun:sqlite`](https://bun.sh/docs/api/sqlite)** 模块，速度非常快 🚀
 
-We embraces SQL dialects and dialect specific drivers and syntax and unlike any other ORM, 
-for synchronous drivers like `bun:sqlite` we have both **async** and **sync** APIs and we mirror most popular 
-SQLite-like `all`, `get`, `values` and `run` query methods syntax.
+我们支持 SQL 方言和方言特定的驱动程序和语法，与其他 ORM 不同的是，
+对于像 `bun:sqlite` 这样的同步驱动程序，我们同时提供**异步**和**同步** API，并且模仿最流行的
+SQLite 风格的 `all`、`get`、`values` 和 `run` 查询方法语法。
 
-#### Step 1 - Install packages
+#### 步骤 1 - 安装包
 <Npm>
 drizzle-orm
 -D drizzle-kit
 </Npm>
 
-#### Step 2 - Initialize the driver and make a query
+#### 步骤 2 - 初始化驱动并执行查询
 ```typescript copy
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 
@@ -37,7 +37,7 @@ const db = drizzle();
 const result = await db.select().from(...);
 ```
 
-If you need to provide your existing driver:
+如果你需要提供你现有的驱动：
 ```typescript copy
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { Database } from 'bun:sqlite';
@@ -48,7 +48,7 @@ const db = drizzle({ client: sqlite });
 const result = await db.select().from(...);
 ```
 
-If you want to use **sync** APIs:
+如果你想使用**同步** API：
 ```typescript copy
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { Database } from 'bun:sqlite';
@@ -62,6 +62,6 @@ const result = db.select().from(users).values();
 const result = db.select().from(users).run();
 ```
 
-#### What's next?
+#### 下一步？
 
 <WhatsNextPostgres/>

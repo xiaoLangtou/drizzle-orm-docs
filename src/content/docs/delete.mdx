@@ -2,21 +2,21 @@ import IsSupportedChipGroup from '@mdx/IsSupportedChipGroup.astro';
 import Callout from '@mdx/Callout.astro';
 import Section from '@mdx/Section.astro';
 
-# SQL Delete
-You can delete all rows in the table:
+# SQL 删除
+您可以删除表中的所有行：
 ```typescript copy
 await db.delete(users);
 ```
-And you can delete with filters and conditions:
+您也可以使用过滤器和条件进行删除：
 ```typescript copy
 await db.delete(users).where(eq(users.name, 'Dan'));
 ```
 
-### Limit
+### 限制
 
 <IsSupportedChipGroup chips={{ 'PostgreSQL': false, 'MySQL': true, 'SQLite': true, 'SingleStore': true }} />
 
-Use `.limit()` to add `limit` clause to the query - for example:
+使用 `.limit()` 为查询添加 `limit` 子句 - 例如：
 <Section>
 ```typescript
 await db.delete(users).where(eq(users.name, 'Dan')).limit(2);
@@ -26,8 +26,8 @@ delete from "users" where "users"."name" = $1 limit $2;
 ```
 </Section>
 
-### Order By
-Use `.orderBy()` to add `order by` clause to the query, sorting the results by the specified fields:
+### 排序
+使用 `.orderBy()` 为查询添加 `order by` 子句，按指定字段对结果进行排序：
 <Section>
 ```typescript
 import { asc, desc } from 'drizzle-orm';
@@ -35,7 +35,7 @@ import { asc, desc } from 'drizzle-orm';
 await db.delete(users).where(eq(users.name, 'Dan')).orderBy(users.name);
 await db.delete(users).where(eq(users.name, 'Dan')).orderBy(desc(users.name));
 
-// order by multiple fields
+// 按多个字段排序
 await db.delete(users).where(eq(users.name, 'Dan')).orderBy(users.name, users.name2);
 await db.delete(users).where(eq(users.name, 'Dan')).orderBy(asc(users.name), desc(users.name2));
 ```
@@ -48,27 +48,27 @@ delete from "users" where "users"."name" = $1 order by "name" asc, "name2" desc;
 ```
 </Section>
 
-### Delete with return
+### 删除并返回
 <IsSupportedChipGroup chips={{ 'PostgreSQL': true, 'SQLite': true, 'MySQL': false, 'SingleStore': false}} />
-You can delete a row and get it back in PostgreSQL and SQLite:
+您可以在 PostgreSQL 和 SQLite 中删除一行并获取它：
 ```typescript copy
 const deletedUser = await db.delete(users)
   .where(eq(users.name, 'Dan'))
   .returning();
 
-// partial return
+// 部分返回
 const deletedUserIds: { deletedId: number }[] = await db.delete(users)
   .where(eq(users.name, 'Dan'))
   .returning({ deletedId: users.id });
 ```
 
-## WITH DELETE clause
+## WITH DELETE 子句
 
 <Callout>
-  Check how to use WITH statement with [select](/docs/select#with-clause), [insert](/docs/insert#with-insert-clause), [update](/docs/update#with-update-clause)
+  查看如何在 [select](/docs/select#with-clause)、[insert](/docs/insert#with-insert-clause)、[update](/docs/update#with-update-clause) 中使用 WITH 语句
 </Callout>
 
-Using the `with` clause can help you simplify complex queries by splitting them into smaller subqueries called common table expressions (CTEs):
+使用 `with` 子句可以帮助您通过将它们拆分为称为公共表表达式（CTEs）的较小子查询来简化复杂查询：
 <Section>
 ```typescript copy
 const averageAmount = db.$with('average_amount').as(

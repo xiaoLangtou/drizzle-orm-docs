@@ -1,5 +1,5 @@
 ---
-title: "Drizzle with Nile Database"
+title: "Drizzle 与 Nile 数据库集成"
 date: "2025-01-15"
 ---
 
@@ -12,52 +12,52 @@ import TransferCode from '@mdx/get-started/TransferCode.mdx';
 import ApplyChanges from '@mdx/get-started/ApplyChanges.mdx';
 import RunFile from '@mdx/get-started/RunFile.mdx';
 
-This tutorial demonstrates how to use Drizzle ORM with [Nile Database](https://thenile.dev). Nile is Postgres, re-engineered for multi-tenant applications. 
+本教程演示如何将 Drizzle ORM 与 [Nile Database](https://thenile.dev) 集成使用。Nile 是为多租户应用程序重新设计的 Postgres。
 
-This tutorial will demonstrate how to use Drizzle with Nile's virtual tenant databases to developer a secure, scalable, multi-tenant application. 
+本教程将演示如何使用 Drizzle 与 Nile 的虚拟租户数据库来开发一个安全、可扩展的多租户应用程序。
 
-We'll walk through building this example application step-by-step. If you want to peek at the complete example, you can take a look at its [Github repository](https://github.com/niledatabase/niledatabase/tree/main/examples/quickstart/drizzle).
+我们将一步步构建这个示例应用程序。如果您想预览完整示例，可以查看其 [Github 仓库](https://github.com/niledatabase/niledatabase/tree/main/examples/quickstart/drizzle)。
 
 <Prerequisites>
-- You should have installed Drizzle ORM and [Drizzle kit](/docs/kit-overview). You can do this by running the following command:
+- 您应该已经安装了 Drizzle ORM 和 [Drizzle kit](/docs/kit-overview)。您可以通过运行以下命令来安装：
 <Npm>
 drizzle-orm
 -D drizzle-kit
 </Npm>
-- You should have installed `dotenv` package for managing environment variables. Read more about this package [here](https://www.npmjs.com/package/dotenv)
+- 您需要安装 `dotenv` 包来管理环境变量。在[这里](https://www.npmjs.com/package/dotenv)了解更多关于这个包的信息
 <Npm>
   dotenv
 </Npm>
-- You should have installed `node-postgres` package for connecting to the Postgres database. Read more about this package [here](https://www.npmjs.com/package/node-postgres)
+- 您需要安装 `node-postgres` 包来连接 Postgres 数据库。在[这里](https://www.npmjs.com/package/node-postgres)了解更多关于这个包的信息
 <Npm>
   node-postgres
 </Npm>
-- You should have installed `express` package for the web framework. Read more about express [here](https://expressjs.com/)
+- 您需要安装 `express` 包作为 Web 框架。在[这里](https://expressjs.com/)了解更多关于 express 的信息
 <Npm>
   express
 </Npm>
 
-- This guide uses [AsyncLocalStorage](https://nodejs.org/api/async_context.html) to manage the tenant context. If your framework or runtime does not support `AsyncLocalStorage`, you can refer to [Drizzle\<\>Nile](../connect-nile) doc for alternative options. 
+- 本指南使用 [AsyncLocalStorage](https://nodejs.org/api/async_context.html) 来管理租户上下文。如果您的框架或运行时不支持 `AsyncLocalStorage`，您可以参考 [Drizzle<>Nile</>](../connect-nile) 文档了解其他选项。
 </Prerequisites>
 
-## Setup Nile and Drizzle ORM
+## 设置 Nile 和 Drizzle ORM
 
 <Steps>
-#### Signup to Nile and create a database
+#### 注册 Nile 并创建数据库
 
-If you haven't already, sign up to [Nile](https://console.thenile.dev) and follow the app instructions to create a new database.
+如果您还没有注册，请注册 [Nile](https://console.thenile.dev) 并按照应用程序说明创建新数据库。
 
-#### Get database connection string
+#### 获取数据库连接字符串
 
-On the left side-bar menu, select the "Settings" option, click on the Postgres logo, and click "generate credentials". Copy the connection string and add it to the `.env` file in your project:
+在左侧菜单栏中，选择"Settings"选项，点击 Postgres 图标，然后点击"generate credentials"。复制连接字符串并将其添加到项目的 `.env` 文件中：
 
 ```plaintext copy
 NILEDB_URL=postgres://youruser:yourpassword@us-west-2.db.thenile.dev:5432:5432/your_db_name
 ```
 
-#### Connect Drizzle ORM to your database
+#### 将 Drizzle ORM 连接到您的数据库
 
-Create a `db.ts` file in the `src/db` directory and set up your database configuration:
+在 `src/db` 目录中创建一个 `db.ts` 文件并设置您的数据库配置：
 
 ```typescript copy filename="src/db/db.ts"
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -72,7 +72,7 @@ export function tenantDB<T>(cb: (tx: any) => T | Promise<T>): Promise<T> {
   return db.transaction(async (tx) => {
     const tenantId = tenantContext.getStore();
     console.log("executing query with tenant: " + tenantId);
-    // if there's a tenant ID, set it in the transaction context
+    // 如果有租户 ID，将其设置在事务上下文中
     if (tenantId) {
       await tx.execute(sql`set local nile.tenant_id = '${sql.raw(tenantId)}'`);
     }
@@ -82,11 +82,11 @@ export function tenantDB<T>(cb: (tx: any) => T | Promise<T>): Promise<T> {
 }
 ```
 
-#### Setup Drizzle config file
+#### 设置 Drizzle 配置文件
 
-**Drizzle config** - a configuration file that is used by [Drizzle Kit](/docs/kit-overview) and contains all the information about your database connection, migration folder and schema files.
+**Drizzle 配置** - 这是一个配置文件，由 [Drizzle Kit](/docs/kit-overview) 使用，包含了有关您的数据库连接、迁移文件夹和架构文件的所有信息。
 
-Create a `drizzle.config.ts` file in the root of your project and add the following content:
+在项目根目录创建一个 `drizzle.config.ts` 文件并添加以下内容：
 
 ```typescript copy filename="drizzle.config.ts"
 import 'dotenv/config';
@@ -101,23 +101,23 @@ export default defineConfig({
 });
 ```
 
-#### Introspect Nile database
+#### 检查 Nile 数据库
 
-Nile databases have built-in tables. The most important of these is the `tenants` table, which is used to create and manage tenants. 
-In order to use this table from our application, we'll use Drizzle Kit CLI to generate a schema file that includes this schema.
+Nile 数据库有一些内置表。其中最重要的是 `tenants` 表，用于创建和管理租户。
+为了从我们的应用程序中使用这个表，我们将使用 Drizzle Kit CLI 生成一个包含此架构的架构文件。
 
 ```bash copy
 npx drizzle-kit pull
 ```
 
-The result of introspection will be a `schema.ts` file, `meta` folder with snapshots of your database schema, sql file with the migration and `relations.ts` file for [relational queries](/docs/rqb).
+检查的结果将是一个 `schema.ts` 文件、用于存储数据库架构快照的 `meta` 文件夹、带有迁移的 sql 文件以及用于[关系查询](/docs/rqb)的 `relations.ts` 文件。
 
 <TransferCode/>
 
-Here is an example of the generated `schema.ts` file:
+以下是生成的 `schema.ts` 文件示例：
 
 ```typescript copy filename="src/db/schema.ts"
-// table schema generated by introspection
+// 通过检查生成的表架构
 import { pgTable, uuid, text, timestamp, varchar, vector, boolean } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
@@ -130,12 +130,12 @@ export const tenants = pgTable("tenants", {
 });
 ```
 
-#### Create additional tables
+#### 创建额外的表
 
-In addition to the built-in tables, our application will need some tables to store its data. We will add them to `src/db/schema.ts` that we previously generated, so this file will look like this:
+除了内置表外，我们的应用程序还需要一些表来存储其数据。我们将把它们添加到之前生成的 `src/db/schema.ts` 中，所以这个文件将看起来像这样：
 
 ```typescript copy filename="src/db/schema.ts"
-// table schema generated by introspection
+// 通过检查生成的表架构
 import { pgTable, uuid, text, timestamp, varchar, vector, boolean } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
@@ -157,16 +157,16 @@ export const todos = pgTable("todos", {
 });
 ```
 
-#### Apply changes to the database
+#### 将更改应用到数据库
 
 <ApplyChanges />
 
-#### Initialize the webapp
+#### 初始化 Web 应用程序
 
-Now that we have set up Drizzle to connect to Nile and we have our schema in place, we can use them in a multi-tenant web application. 
-We are using Express as the web framework in this example, although Nile and Drizzle can be used from any web framework.
+现在我们已经设置了 Drizzle 来连接 Nile 并且有了我们的架构，我们可以在多租户 Web 应用程序中使用它们。
+在这个示例中，我们使用 Express 作为 Web 框架，尽管 Nile 和 Drizzle 可以从任何 Web 框架中使用。
 
-To keep the example simple, we'll implement the webapp in a single file - `src/app.ts`. We'll start by initializing the webapp:
+为了保持示例简单，我们将在单个文件 - `src/app.ts` 中实现 Web 应用程序。我们将从初始化 Web 应用程序开始：
 
 ```typescript copy filename="src/app.ts"
 import express from "express";
@@ -184,14 +184,14 @@ app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 app.use(express.json());
 ```
 
-#### Initialize the tenant-aware middleware
+#### 初始化租户感知中间件
 
-Next, we'll add middleware to the example. This middleware grabs the tenant ID from the path parameters and stores it in the `AsyncLocalStorage`. 
-The `tenantDB` wrapper that we created in `src/db/index.ts` uses this tenant ID to set `nile.tenant_id` when executing queries, 
-which then guarantees that the queries will execute against this tenant's virtual database.
+接下来，我们将向示例添加中间件。这个中间件从路径参数中获取租户 ID 并将其存储在 `AsyncLocalStorage` 中。
+我们在 `src/db/index.ts` 中创建的 `tenantDB` 包装器使用这个租户 ID 在执行查询时设置 `nile.tenant_id`，
+这样就保证了查询将在这个租户的虚拟数据库上执行。
 
 ```typescript copy filename="src/app.ts"
-// set the tenant ID in the context based on the URL parameter
+// 根据 URL 参数在上下文中设置租户 ID
 app.use('/api/tenants/:tenantId/*', (req, res, next) => {
   const tenantId = req.params.tenantId;
   console.log("setting context to tenant: " + tenantId);
@@ -200,17 +200,17 @@ app.use('/api/tenants/:tenantId/*', (req, res, next) => {
 ```
 
 <Callout>
-The example gets the tenant ID from path parameter, but it is also common to set the tenant ID in a header such as `x-tenant-id` or in a cookie.
+示例从路径参数中获取租户 ID，但通常也可以在 `x-tenant-id` 等头部或 cookie 中设置租户 ID。
 </Callout>
 
-#### Add routes
+#### 添加路由
 
-Lastly, we need to add some routes for creating and listing tenants and todos. Note how we are using `tenantDB` wrapper to connect to the tenant's virtual database.
-Also note how in `app.get("/api/tenants/:tenantId/todos"` we did not need to specify `where tenant_id=...` in the query. 
-This is exactly because we are routed to that tenant's database and the query cannot return data for any other tenant.
+最后，我们需要添加一些用于创建和列出租户和待办事项的路由。注意我们如何使用 `tenantDB` 包装器来连接到租户的虚拟数据库。
+同时注意在 `app.get("/api/tenants/:tenantId/todos"` 中我们不需要在查询中指定 `where tenant_id=...`。
+这正是因为我们被路由到了该租户的数据库，查询不能返回任何其他租户的数据。
 
 ```typescript copy filename="src/app.ts" {6,20,39,58,62,75,83}
-// create new tenant
+// 创建新租户
 app.post("/api/tenants", async (req, res) => {
   try {
     const name = req.body.name;
@@ -225,7 +225,7 @@ app.post("/api/tenants", async (req, res) => {
   }
 });
 
-// return list of tenants
+// 返回租户列表
 app.get("/api/tenants", async (req, res) => {
   let tenants: any = [];
   try {
@@ -239,7 +239,7 @@ app.get("/api/tenants", async (req, res) => {
   }
 });
 
-// add new task for tenant
+// 为租户添加新任务
 app.post("/api/tenants/:tenantId/todos", async (req, res) => {
   try {
     const { title, complete } = req.body;
@@ -254,7 +254,7 @@ app.post("/api/tenants/:tenantId/todos", async (req, res) => {
         .values({ tenantId, title, complete })
         .returning();
     });
-    // return without the embedding vector, since it is huge and useless
+    // 返回时不包含嵌入向量，因为它很大且无用
     res.json(newTodo);
   } catch (error: any) {
     console.log("error adding task: " + error.message);
@@ -262,8 +262,8 @@ app.post("/api/tenants/:tenantId/todos", async (req, res) => {
   }
 });
 
-// update tasks for tenant
-// No need for where clause because we have the tenant in the context
+// 更新租户的任务
+// 不需要 where 子句，因为我们在上下文中有租户
 app.put("/api/tenants/:tenantId/todos", async (req, res) => {
   try {
     const { id, complete } = req.body;
@@ -280,10 +280,10 @@ app.put("/api/tenants/:tenantId/todos", async (req, res) => {
   }
 });
 
-// get all tasks for tenant
+// 获取租户的所有任务
 app.get("/api/tenants/:tenantId/todos", async (req, res) => {
   try {
-    // No need for a "where" clause here because we are setting the tenant ID in the context
+    // 这里不需要 "where" 子句，因为我们在上下文中设置了租户 ID
     const todos = await tenantDB(async (tx) => {
       return await tx
         .select({
@@ -302,41 +302,41 @@ app.get("/api/tenants/:tenantId/todos", async (req, res) => {
 });
 ```
 
-#### Try it out!
+#### 试一试！
 
-You can now run your new web application:
+现在您可以运行您的新 Web 应用程序：
 
 ```bash copy
 npx tsx src/app.ts
 ```
 
-and use `curl` to try the routes you just created:
+并使用 `curl` 来尝试您刚刚创建的路由：
 
 ```bash
-# create a tenant
+# 创建租户
 curl --location --request POST 'localhost:3001/api/tenants' \
 --header 'Content-Type: application/json' \
 --data-raw '{"name":"my first customer"}'
 
-# get tenants
+# 获取租户列表
 curl  -X GET 'http://localhost:3001/api/tenants'
 
-# create a todo (don't forget to use a real tenant-id in the URL)
+# 创建待办事项（别忘了在 URL 中使用真实的租户 ID）
 curl  -X POST \
   'http://localhost:3001/api/tenants/108124a5-2e34-418a-9735-b93082e9fbf2/todos' \
   --header 'Content-Type: application/json' \
   --data-raw '{"title": "feed the cat", "complete": false}'
 
-# list todos for tenant (don't forget to use a real tenant-id in the URL)
+# 列出租户的待办事项（别忘了在 URL 中使用真实的租户 ID）
 curl  -X GET \
   'http://localhost:3001/api/tenants/108124a5-2e34-418a-9735-b93082e9fbf2/todos'
 ```
 </Steps>
 
-## Project file structure
+## 项目文件结构
 
-This is the file structure of the project. In the `src/db` directory, we have database-related files including connection in `db.ts` and schema definitions 
-in `schema.ts`. The files generated by the migrations and introspections are in `./drizzle`
+这是项目的文件结构。在 `src/db` 目录中，我们有数据库相关文件，包括 `db.ts` 中的连接配置和 `schema.ts` 中的架构定义。
+迁移和检查生成的文件在 `./drizzle` 中
 
 ```plaintext
 📦 <project root>

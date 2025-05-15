@@ -1,5 +1,5 @@
 ---
-title: PostgreSQL extensions
+title: PostgreSQL 扩展
 ---
 
 import Callout from '@mdx/Callout.astro';
@@ -8,26 +8,24 @@ import Section from '@mdx/Section.astro';
 ### `pg_vector`
 
 <Callout>
-There is no specific code to create an extension inside the Drizzle schema. We assume that if you are using vector types, 
-indexes, and queries, you have a PostgreSQL database with the pg_vector extension installed.
+Drizzle 模式中没有特定的代码来创建扩展。我们假设如果您正在使用向量类型、索引和查询，您已经安装了 pg_vector 扩展的 PostgreSQL 数据库。
 </Callout>
 
-[`pg_vector`](https://github.com/pgvector/pgvector) is open-source vector similarity search for Postgres
+[`pg_vector`](https://github.com/pgvector/pgvector) 是 PostgreSQL 的开源向量相似性搜索
 
-Store your vectors with the rest of your data. Supports:
+将向量与您的其他数据一起存储。支持：
 
-- exact and approximate nearest neighbor search
-- single-precision, half-precision, binary, and sparse vectors
-- L2 distance, inner product, cosine distance, L1 distance, Hamming distance, and Jaccard distance
+- 精确和近似的最近邻搜索
+- 单精度、半精度、二进制和稀疏向量
+- L2距离、内积、余弦距离、L1距离、汉明距离和杰卡德距离
 
-#### Column Types
+#### 列类型
 
 **`vector`**
 
-Store your vectors with the rest of your data
+将您的向量与其他数据一起存储
 
-For more info please refer to the official pg_vector docs **[docs.](https://github.com/pgvector/pgvector)**
-
+更多信息请参考官方 pg_vector 文档 **[文档](https://github.com/pgvector/pgvector)**
 
 <Section>
 ```ts
@@ -43,13 +41,13 @@ CREATE TABLE IF NOT EXISTS "table" (
 ```
 </Section>
 
-#### Indexes
+#### 索引
 
-You can now specify indexes for `pg_vector` and utilize `pg_vector` functions for querying, ordering, etc.
+您现在可以为 `pg_vector` 指定索引，并利用 `pg_vector` 函数进行查询、排序等操作。
 
-Let's take a few examples of `pg_vector` indexes from the `pg_vector` docs and translate them to Drizzle
+让我们从 `pg_vector` 文档中选取几个索引示例并转换为 Drizzle 语法
 
-#### L2 distance, Inner product and Cosine distance
+#### L2距离、内积和余弦距离
 
 ```ts
 // CREATE INDEX ON items USING hnsw (embedding vector_l2_ops);
@@ -65,7 +63,7 @@ const table = pgTable('items', {
 ])
 ```
 
-#### L1 distance, Hamming distance and Jaccard distance - added in pg_vector 0.7.0 version
+#### L1距离、汉明距离和杰卡德距离 - 在 pg_vector 0.7.0 版本中添加
 
 ```ts
 // CREATE INDEX ON items USING hnsw (embedding vector_l1_ops);
@@ -81,11 +79,11 @@ const table = pgTable('table', {
 ])
 ```
 
-#### Helper Functions
+#### 辅助函数
 
-For queries, you can use predefined functions for vectors or create custom ones using the SQL template operator.
+对于查询，您可以使用预定义的向量函数或使用 SQL 模板运算符创建自定义函数。
 
-You can also use the following helpers:
+您还可以使用以下辅助函数：
 
 ```ts
 import { l2Distance, l1Distance, innerProduct, 
@@ -101,7 +99,7 @@ hammingDistance(table.column, '101') // table.column <~> '101'
 jaccardDistance(table.column, '101') // table.column <%> '101'
 ```
 
-If `pg_vector` has some other functions to use, you can replicate implementation from existing one we have. Here is how it can be done
+如果 `pg_vector` 有其他函数需要使用，您可以从现有的实现中复制。以下是实现方法：
 
 ```ts
 export function l2Distance(
@@ -115,11 +113,11 @@ export function l2Distance(
 }
 ```
 
-Name it as you wish and change the operator. This example allows for a numbers array, strings array, string, or even a select query. Feel free to create any other type you want or even contribute and submit a PR
+您可以随意命名并更改运算符。此示例允许数字数组、字符串数组、字符串甚至选择查询。您可以自由创建任何其他类型，甚至可以贡献并提交 PR
 
-#### Examples
+#### 示例
 
-Let's take a few examples of `pg_vector` queries from the `pg_vector` docs and translate them to Drizzle
+让我们从 `pg_vector` 文档中选取几个查询示例并转换为 Drizzle
 
 ```ts
 import { l2Distance } from 'drizzle-orm';
@@ -137,30 +135,30 @@ db.select().from(items).orderBy(l2Distance(items.embedding, subquery)).limit(5)
 // SELECT (embedding <#> '[3,1,2]') * -1 AS inner_product FROM items;
 db.select({ innerProduct: sql`(${maxInnerProduct(items.embedding, [3,1,2])}) * -1` }).from(items)
 
-// and more!
+// 更多示例！
 ```
 
 ### `postgis`
 
 <Callout>
-There is no specific code to create an extension inside the Drizzle schema. We assume that if you are using postgis types, indexes, and queries, you have a PostgreSQL database with the `postgis` extension installed.
+Drizzle 模式中没有特定的代码来创建扩展。我们假设如果您正在使用 postgis 类型、索引和查询，您已经安装了 `postgis` 扩展的 PostgreSQL 数据库。
 </Callout>
 
-As [PostGIS](https://postgis.net/) website mentions:
+正如 [PostGIS](https://postgis.net/) 网站所述：
 
-> PostGIS extends the capabilities of the PostgreSQL relational database by adding support for storing, indexing, and querying geospatial data.
+> PostGIS 通过添加对地理空间数据的存储、索引和查询支持，扩展了 PostgreSQL 关系数据库的功能。
 
 <Callout type="info">
-If you are using the `introspect` or `push` commands with the PostGIS extension and don't want PostGIS tables to be included, you can use [`extensionsFilters`](/docs/drizzle-config-file#extensionsfilters) to ignore all the PostGIS tables
+如果您在使用 `introspect` 或 `push` 命令时不想包含 PostGIS 表，可以使用 [`extensionsFilters`](/docs/drizzle-config-file#extensionsfilters) 来忽略所有 PostGIS 表
 </Callout>
 
-#### Column Types
+#### 列类型
 
 **`geometry`**
 
-Store your geometry data with the rest of your data
+将您的地理空间数据与其他数据一起存储
 
-For more info please refer to the official PostGIS docs **[docs.](https://postgis.net/workshops/postgis-intro/geometries.html)**
+更多信息请参考官方 PostGIS 文档 **[文档](https://postgis.net/workshops/postgis-intro/geometries.html)**
 
 ```ts
 const items = pgTable('items', {
@@ -170,28 +168,28 @@ const items = pgTable('items', {
 });
 ```
 
-**mode**
+**模式**
 
-Type `geometry` has 2 modes for mappings from the database: `tuple` and `xy`.
+`geometry` 类型有 2 种从数据库映射的模式：`tuple` 和 `xy`。
 
-- `tuple` will be accepted for insert and mapped on select to a tuple. So, the database geometry will be typed as [1,2] with drizzle.
-- `xy` will be accepted for insert and mapped on select to an object with x, y coordinates. So, the database geometry will be typed as `{ x: 1, y: 2 }` with drizzle
+- `tuple` 将在插入时被接受，并在选择时映射为元组。因此，数据库几何图形将使用 drizzle 类型化为 [1,2]。
+- `xy` 将在插入时被接受，并在选择时映射为具有 x、y 坐标的对象。因此，数据库几何图形将使用 drizzle 类型化为 `{ x: 1, y: 2 }`。
 
-**type**
+**类型**
 
-The current release has a predefined type: `point`, which is the `geometry(Point)` type in the PostgreSQL PostGIS extension. You can specify any string there if you want to use some other type
+当前版本有一个预定义的类型：`point`，它是 PostgreSQL PostGIS 扩展中的 `geometry(Point)` 类型。如果您想使用其他类型，可以在那里指定任何字符串
 
-#### Indexes
+#### 索引
 
-With the available Drizzle indexes API, you should be able to write any indexes for PostGIS
+使用可用的 Drizzle 索引 API，您应该能够为 PostGIS 编写任何索引
 
-**Examples**
+**示例**
 
 ```ts
 // CREATE INDEX custom_idx ON table USING GIST (geom);
 
 const table = pgTable('table', {
-  	geo: geometry({ type: 'point' }),
+   	geo: geometry({ type: 'point' }),
 }, (table) => [
   index('custom_idx').using('gist', table.geo)
 ])

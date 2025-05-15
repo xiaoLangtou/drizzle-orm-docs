@@ -1,5 +1,5 @@
 ---
-title: Gel auth extension
+title: Gel 认证扩展
 slug: gel-ext-auth
 ---
 import Prerequisites from "@mdx/Prerequisites.astro";
@@ -7,13 +7,13 @@ import Callout from "@mdx/Callout.astro";
 import Npx from "@mdx/Npx.astro";
 
 <Prerequisites>
-- Get started with [Gel](/docs/get-started-gel)
-- Using [drizzle-kit pull](/docs/drizzle-kit-pull)
+- 从 [Gel](/docs/get-started-gel) 开始
+- 使用 [drizzle-kit pull](/docs/drizzle-kit-pull)
 </Prerequisites>
 
-#### Step 1 - Define Gel auth schema
+#### 步骤 1 - 定义 Gel 认证模式
 
-In `dbschema/default.esdl` file add a Gel schema with an auth extension
+在 `dbschema/default.esdl` 文件中添加一个带有认证扩展的 Gel 模式
 
 ```esdl
 using extension auth;
@@ -34,46 +34,45 @@ module default {
 }
 ```
 
-#### Step 2 - Push Gel schema to the database
+#### 步骤 2 - 将 Gel 模式推送到数据库
 
-Generate Gel migration file:
+生成 Gel 迁移文件：
 ```bash
 gel migration create
 ```
 
-Apply Gel migrations to the database
+将 Gel 迁移应用到数据库
 ```bash
 gel migration apply
 ```
 
-#### Step 3 - Setup Drizzle config file
+#### 步骤 3 - 设置 Drizzle 配置文件
 
-**Drizzle config** - a configuration file that is used by [Drizzle Kit](/docs/kit-overview) and contains all the information about your database connection, migration folder and schema files.
+**Drizzle 配置** - 一个由 [Drizzle Kit](/docs/kit-overview) 使用的配置文件，包含了有关数据库连接、迁移文件夹和模式文件的所有信息。
 
-Create a `drizzle.config.ts` file in the root of your project and add the following content:
+在项目根目录创建一个 `drizzle.config.ts` 文件并添加以下内容：
 
 ```typescript copy filename="drizzle.config.ts"
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
   dialect: 'gel',
-  // Enable auth schema for drizzle-kit
+  // 为 drizzle-kit 启用认证模式
   schemaFilter: ['ext::auth', 'public']
 });
 ```
 
-#### Step 4 - Pull Gel types to Drizzle schema
+#### 步骤 4 - 将 Gel 类型拉取到 Drizzle 模式
 
-Pull your database schema:
+拉取你的数据库模式：
 <Npx>
 drizzle-kit pull
 </Npx>
 
-Here is an example of the generated schema.ts file:
+这是生成的 schema.ts 文件的示例：
 
 <Callout type="warning">
-You'll get more than just the `Identity` table from `ext::auth`. Drizzle will pull in all the 
-`auth` tables you can use. The example below showcases just one of them.
+你将获得的不仅仅是来自 `ext::auth` 的 `Identity` 表。Drizzle 将拉取所有你可以使用的 `auth` 表。下面的示例仅展示了其中之一。
 </Callout>
 
 ```ts
@@ -113,4 +112,4 @@ export const user = gelTable('User', {
 ]);
 ```
 
-🎉 Now you can use the `auth` tables in your queries!
+🎉 现在你可以在查询中使用 `auth` 表了！

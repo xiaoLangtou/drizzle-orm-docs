@@ -4,22 +4,22 @@ import Prerequisites from "@mdx/Prerequisites.astro";
 import CodeTabs from "@mdx/CodeTabs.astro";
 import WhatsNextPostgres from "@mdx/WhatsNextPostgres.astro";
 
-# Drizzle \<\> MySQL
+# Drizzle <> MySQL</>
 
-To use Drizzle with a MySQL database, you should use the `mysql2` driver
+要在 MySQL 数据库中使用 Drizzle，你应该使用 `mysql2` 驱动
 
-According to the **[official website](https://github.com/sidorares/node-mysql2)**, 
-`mysql2` is a MySQL client for Node.js with focus on performance.  
+根据**[官方网站](https://github.com/sidorares/node-mysql2)**，
+`mysql2` 是一个专注于性能的 Node.js MySQL 客户端。
 
-Drizzle ORM natively supports `mysql2` with `drizzle-orm/mysql2` package.
+Drizzle ORM 通过 `drizzle-orm/mysql2` 包原生支持 `mysql2`。
 
-#### Step 1 - Install packages
+#### 步骤 1 - 安装包
 <Npm>
 drizzle-orm mysql2
 -D drizzle-kit
 </Npm>
 
-#### Step 2 - Initialize the driver and make a query
+#### 步骤 2 - 初始化驱动并执行查询
 <CodeTabs items={['mysql2', 'mysql with config']}>
 ```typescript copy
 import { drizzle } from "drizzle-orm/mysql2";
@@ -31,14 +31,14 @@ const response = await db.select().from(...)
 ```typescript copy
 import { drizzle } from "drizzle-orm/mysql2";
 
-// You can specify any property from the mysql2 connection options
+// 你可以指定任何 mysql2 连接选项
 const db = drizzle({ connection:{ uri: process.env.DATABASE_URL }});
 
 const response = await db.select().from(...)
 ```
 </CodeTabs>
 
-If you need to provide your existing driver:
+如果你需要提供你现有的驱动：
 
 <CodeTabs items={['Client connection', 'Pool connection']}>
   ```typescript copy
@@ -70,11 +70,11 @@ If you need to provide your existing driver:
 </CodeTabs>
 
 <Callout type="warning" emoji="⚙️">
-  For the built in `migrate` function with DDL migrations we and drivers strongly encourage you to use single `client` connection.  
+  对于内置的带有 DDL 迁移的 `migrate` 函数，我们和驱动强烈建议使用单个 `client` 连接。
 
-  For querying purposes feel free to use either `client` or `pool` based on your business demands.
+  对于查询目的，你可以根据业务需求自由使用 `client` 或 `pool`。
 </Callout>
 
-#### What's next?
+#### 下一步？
 
 <WhatsNextPostgres/>

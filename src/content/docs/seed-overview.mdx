@@ -11,42 +11,34 @@ import IsSupportedChipGroup from '@mdx/IsSupportedChipGroup.astro';
 <IsSupportedChipGroup chips={{ 'PostgreSQL': true, 'SQLite': true, 'MySQL': true, 'SingleStore': false }} />
 
 <Callout type='warning'>
-  `drizzle-seed` can only be used with `drizzle-orm@0.36.4` or higher. Versions lower than this may work at runtime but could have type issues and identity column issues, as this patch was introduced in `drizzle-orm@0.36.4`
+  `drizzle-seed` 只能与 `drizzle-orm@0.36.4` 或更高版本一起使用。低于此版本可能在运行时工作，但可能存在类型问题和标识列问题，因为这个补丁是在 `drizzle-orm@0.36.4` 中引入的。
 </Callout>
 
-`drizzle-seed` is a TypeScript library that helps you generate deterministic, yet realistic,
-fake data to populate your database. By leveraging a seedable pseudorandom number generator (pRNG),
-it ensures that the data you generate is consistent and reproducible across different runs.
-This is especially useful for testing, development, and debugging purposes.
+`drizzle-seed` 是一个 TypeScript 库，可以帮助你生成确定性的、真实的假数据来填充数据库。通过利用可播种的伪随机数生成器（pRNG），它确保生成的数据在不同运行之间保持一致和可重现。这对于测试、开发和调试特别有用。
 
-#### What is Deterministic Data Generation?
+#### 什么是确定性数据生成？
 
-Deterministic data generation means that the same input will always produce the same output.
-In the context of `drizzle-seed`, when you initialize the library with the same seed number,
-it will generate the same sequence of fake data every time. This allows for predictable and repeatable data sets.
+确定性数据生成意味着相同的输入将始终产生相同的输出。在 `drizzle-seed` 的上下文中，当你使用相同的种子数初始化库时，它每次都会生成相同的假数据序列。这允许生成可预测和可重复的数据集。
 
-#### Pseudorandom Number Generator (pRNG)
+#### 伪随机数生成器（pRNG）
 
-A pseudorandom number generator is an algorithm that produces a sequence of numbers
-that approximates the properties of random numbers. However, because it's based on an initial value
-called a seed, you can control its randomness. By using the same seed, the pRNG will produce the
-same sequence of numbers, making your data generation process reproducible.
+伪随机数生成器是一种算法，它产生一个近似随机数特性的数字序列。但是，因为它基于一个称为种子的初始值，所以你可以控制其随机性。通过使用相同的种子，pRNG 将产生相同的数字序列，使你的数据生成过程可重现。
 
-#### Benefits of Using a pRNG:
+#### 使用 pRNG 的好处：
 
-- Consistency: Ensures that your tests run on the same data every time.
-- Debugging: Makes it easier to reproduce and fix bugs by providing a consistent data set.
-- Collaboration: Team members can share seed numbers to work with the same data sets.
+- 一致性：确保你的测试每次都在相同的数据上运行。
+- 调试：通过提供一致的数据集，使得更容易重现和修复错误。
+- 协作：团队成员可以共享种子数字以使用相同的数据集。
 
-With drizzle-seed, you get the best of both worlds: the ability to generate realistic fake data and the control to reproduce it whenever needed.
+使用 drizzle-seed，你可以同时获得两个优势：生成真实的假数据的能力和在需要时重现它的控制能力。
 
-## Installation
+## 安装
 
 <Npm>drizzle-seed</Npm>
 
-## Basic Usage
+## 基本用法
 
-In this example we will create 10 users with random names and ids
+在这个例子中，我们将创建 10 个具有随机名称和 ID 的用户
 
 ```ts {12}
 import { pgTable, integer, text } from "drizzle-orm/pg-core";
@@ -66,12 +58,12 @@ async function main() {
 main();
 ```
 
-## Options
+## 选项
 
 **`count`**
 
-By default, the `seed` function will create 10 entities.
-However, if you need more for your tests, you can specify this in the seed options object
+默认情况下，`seed` 函数将创建 10 个实体。
+但是，如果你的测试需要更多，你可以在种子选项对象中指定这个
 
 ```ts
 await seed(db, schema, { count: 1000 });
@@ -79,19 +71,18 @@ await seed(db, schema, { count: 1000 });
 
 **`seed`**
 
-If you need a seed to generate a different set of values for all subsequent runs, you can define a different number
-in the `seed` option. Any new number will generate a unique set of values
+如果你需要一个种子来为所有后续运行生成一组不同的值，你可以在 `seed` 选项中定义一个不同的数字。任何新的数字都将生成一组唯一的值
 
 ```ts
 await seed(db, schema, { seed: 12345 });
 ```
 
-## Reset database
+## 重置数据库
 
-With `drizzle-seed`, you can easily reset your database and seed it with new values, for example, in your test suites
+使用 `drizzle-seed`，你可以轻松重置数据库并用新值填充它，例如在你的测试套件中
 
 ```ts
-// path to a file with schema you want to reset
+// 指向要重置的模式文件的路径
 import * as schema from "./schema.ts";
 import { reset } from "drizzle-seed";
 
@@ -103,12 +94,11 @@ async function main() {
 main();
 ```
 
-Different dialects will have different strategies for database resetting
+不同的数据库方言将有不同的数据库重置策略
 
 <Tabs items={['PostgreSQL', 'MySQL', 'SQLite']}>
 <Tab>
-For PostgreSQL, the `drizzle-seed` package will generate `TRUNCATE` statements with the `CASCADE` option to 
-ensure that all tables are empty after running the reset function
+对于 PostgreSQL，`drizzle-seed` 包将生成带有 `CASCADE` 选项的 `TRUNCATE` 语句，以确保运行重置函数后所有表都为空
 
 ```sql
 TRUNCATE tableName1, tableName2, ... CASCADE;
@@ -116,8 +106,7 @@ TRUNCATE tableName1, tableName2, ... CASCADE;
 
 </Tab>
 <Tab>
-For MySQL, the `drizzle-seed` package will first disable `FOREIGN_KEY_CHECKS` to ensure the next step won't fail, and then 
-generate `TRUNCATE` statements to empty the content of all tables
+对于 MySQL，`drizzle-seed` 包将首先禁用 `FOREIGN_KEY_CHECKS` 以确保下一步不会失败，然后生成 `TRUNCATE` 语句来清空所有表的内容
 
 ```sql
 SET FOREIGN_KEY_CHECKS = 0;
@@ -129,8 +118,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 </Tab>
 <Tab>
-For SQLite, the `drizzle-seed` package will first disable the `foreign_keys` pragma to ensure the next step won't fail, 
-and then generate `DELETE FROM` statements to empty the content of all tables
+对于 SQLite，`drizzle-seed` 包将首先禁用 `foreign_keys` pragma 以确保下一步不会失败，然后生成 `DELETE FROM` 语句来清空所有表的内容
 
 ```sql
 PRAGMA foreign_keys = OFF;
@@ -143,21 +131,21 @@ PRAGMA foreign_keys = ON;
 </Tab>
 </Tabs>
 
-## Refinements
+## 细化
 
-In case you need to change the behavior of the seed generator functions that `drizzle-seed` uses by default, you can specify your own implementation and even use your own list of values for the seeding process
+如果你需要更改 `drizzle-seed` 默认使用的种子生成器函数的行为，你可以指定自己的实现，甚至可以使用自己的值列表进行播种
 
-`.refine` is a callback that receives a list of all available generator functions from `drizzle-seed`. It should return an object with keys representing the tables you want to refine, defining their behavior as needed. 
-Each table can specify several properties to simplify seeding your database:
+`.refine` 是一个回调函数，它接收来自 `drizzle-seed` 的所有可用生成器函数的列表。它应该返回一个对象，其键表示你想要细化的表，定义它们所需的行为。
+每个表可以指定几个属性来简化数据库的播种：
 
 <rem025 />
 
-- `columns`: Refine the default behavior of each column by specifying the required generator function.
-- `count`: Specify the number of rows to insert into the database. By default, it's 10. If a global count is defined in the `seed()` options, the count defined here will override it for this specific table.
-- `with`: Define how many referenced entities to create for each parent table if you want to generate associated entities.
+- `columns`：通过指定所需的生成器函数来细化每个列的默认行为。
+- `count`：指定要插入数据库的行数。默认为 10。如果在 `seed()` 选项中定义了全局计数，这里定义的计数将覆盖该特定表的计数。
+- `with`：如果你想生成关联实体，定义每个父表要创建多少个引用实体。
 
 <Callout title='info'>
-You can also specify a weighted random distribution for the number of referenced values you want to create. For details on this API, you can refer to [Weighted Random docs](#weighted-random) docs section
+你还可以为要创建的引用值的数量指定加权随机分布。有关此 API 的详细信息，你可以参考[加权随机文档](#weighted-random)部分
 </Callout>
 
 **API**
@@ -173,7 +161,7 @@ await seed(db, schema).refine((f) => ({
 }));
 ```
 
-Let's check a few examples with an explanation of what will happen:
+让我们看几个例子，并解释会发生什么：
 
 ```ts filename='schema.ts'
 import { pgTable, integer, text } from "drizzle-orm/pg-core";
@@ -190,7 +178,7 @@ export const posts = pgTable("posts", {
 });
 ```
 
-**Example 1**: Seed only the `users` table with 20 entities and with refined seed logic for the `name` column
+**示例 1**：仅用 20 个实体播种 `users` 表，并为 `name` 列细化播种逻辑
 ```ts filename='index.ts'
 import { drizzle } from "drizzle-orm/node-postgres";
 import { seed } from "drizzle-seed";
@@ -212,7 +200,7 @@ async function main() {
 main();
 ```
 
-**Example 2**: Seed the `users` table with 20 entities and add 10 `posts` for each `user` by seeding the `posts` table and creating a reference from `posts` to `users`
+**示例 2**：用 20 个实体播种 `users` 表，并通过播种 `posts` 表并创建从 `posts` 到 `users` 的引用，为每个 `user` 添加 10 个 `posts`
 ```ts filename='index.ts'
 import { drizzle } from "drizzle-orm/node-postgres";
 import { seed } from "drizzle-seed";
@@ -234,8 +222,7 @@ async function main() {
 main();
 ```
 
-**Example 3**: Seed the `users` table with 5 entities and populate the database with 100 `posts` without connecting them to the `users` entities. Refine `id` generation for `users` so 
-that it will give any int from `10000` to `20000` and remains unique, and refine `posts` to retrieve values from a self-defined array
+**示例 3**：用 5 个实体播种 `users` 表，并用 100 个 `posts` 填充数据库，而不将它们连接到 `users` 实体。细化 `users` 的 `id` 生成，使其给出 `10000` 到 `20000` 之间的任何整数并保持唯一，并细化 `posts` 以从自定义数组中检索值
 ```ts filename='index.ts'
 import { drizzle } from "drizzle-orm/node-postgres";
 import { seed } from "drizzle-seed";
@@ -260,11 +247,11 @@ async function main() {
         columns: {
             description: f.valuesFromArray({
             values: [
-                "The sun set behind the mountains, painting the sky in hues of orange and purple", 
-                "I can't believe how good this homemade pizza turned out!", 
-                "Sometimes, all you need is a good book and a quiet corner.", 
-                "Who else thinks rainy days are perfect for binge-watching old movies?", 
-                "Tried a new hiking trail today and found the most amazing waterfall!",
+                "太阳落在山后，将天空染成橙色和紫色", 
+                "我简直不敢相信这个自制披萨做得这么好！", 
+                "有时候，你只需要一本好书和一个安静的角落。", 
+                "谁还觉得雨天最适合连续看老电影？", 
+                "今天尝试了一条新的徒步路线，发现了最令人惊叹的瀑布！",
                 // ...
             ],
           })
@@ -277,24 +264,24 @@ main();
 ```
 
 <Callout type='warning'>
-There are many more possibilities that we will define in these docs, but for now, you can explore a few sections in this documentation. Check the [Generators](#generators) section to get familiar with all the available generator functions you can use.
+我们将在这些文档中定义更多可能性，但现在，你可以浏览文档中的几个部分。查看[生成器](#generators)部分以了解所有可用的生成器函数。
 
-A particularly great feature is the ability to use weighted randomization, both for generator values created for a column and for determining the number of related entities that can be generated by `drizzle-seed`.
+一个特别棒的功能是能够使用加权随机化，既可以用于为列创建的生成器值，也可以用于确定 `drizzle-seed` 可以生成的相关实体的数量。
 
-Please check [Weighted Random docs](#weighted-random) for more info.
+请查看[加权随机文档](#weighted-random)了解更多信息。
 </Callout>
 
 
-## Weighted Random
+## 加权随机
 
-There may be cases where you need to use multiple datasets with a different priority that should be inserted into your database during the seed stage. For such cases, drizzle-seed provides an API called weighted random
+可能会有一些情况，你需要在播种阶段使用具有不同优先级的多个数据集插入到数据库中。对于这种情况，drizzle-seed 提供了一个称为加权随机的 API
 
-The Drizzle Seed package has a few places where weighted random can be used:
+Drizzle Seed 包有几个地方可以使用加权随机：
 
-- Columns inside each table refinements
-- The `with` property, determining the amount of related entities to be created
+- 表细化中的列
+- `with` 属性，确定要创建的相关实体的数量
 
-Let's check an example for both:
+让我们看看这两个例子：
 
 ```ts filename="schema.ts"
 import { pgTable, integer, text, varchar, doublePrecision } from "drizzle-orm/pg-core";
@@ -327,7 +314,7 @@ export const details = pgTable(
 );
 ```
 
-**Example 1**: Refine the `unitPrice` generation logic to generate `5000` random prices, with a 30% chance of prices between 10-100 and a 70% chance of prices between 100-300
+**示例 1**：细化 `unitPrice` 生成逻辑以生成 `5000` 个随机价格，其中 10-100 之间的价格有 30% 的机会，100-300 之间的价格有 70% 的机会
 
 ```ts filename="index.ts"
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -361,7 +348,7 @@ async function main() {
 main();
 ```
 
-**Example 2**: For each order, generate 1 to 3 details with a 60% chance, 5 to 7 details with a 30% chance, and 8 to 10 details with a 10% chance
+**示例 2**：对于每个订单，生成 1 到 3 个详情的机会为 60%，5 到 7 个详情的机会为 30%，8 到 10 个详情的机会为 10%
 
 ```ts filename="index.ts"
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -388,7 +375,7 @@ async function main() {
 main();
 ```
 
-## Complex example
+## 复杂示例
 
 <CodeTabs items={["main.ts", "schema.ts"]}>
 <Section>
@@ -620,18 +607,14 @@ export const details = pgTable('order_detail', {
 </Section>
 </CodeTabs>
 
-## Limitations
+## 限制
 
-#### Types limitations for `with`
+#### `with` 的类型限制
 
-Due to certain TypeScript limitations and the current API in Drizzle, it is not possible to properly infer references between tables, especially when circular dependencies between tables exist.
+由于某些 TypeScript 限制和 Drizzle 中的当前 API，无法正确推断表之间的引用，特别是当表之间存在循环依赖时。
 
-This means the `with` option will display all tables in the schema, and you will need to manually select the one that has a one-to-many relationship
+这意味着 `with` 选项将显示模式中的所有表，你需要手动选择具有一对多关系的表
 
 <Callout title='warning'>
-The `with` option works for one-to-many relationships. For example, if you have one `user` and many `posts`, you can use users `with` posts, but you cannot use posts `with` users
+`with` 选项适用于一对多关系。例如，如果你有一个 `user` 和多个 `posts`，你可以在 `user` 表中使用 `with` 选项来生成多个 `posts`。但是，如果你有一个多对多关系，你需要手动处理它。
 </Callout>
-
-#### Type limitations for the third parameter in Drizzle tables:
-
-Currently, we do not have type support for the third parameter in Drizzle tables. While it will work at runtime, it will not function correctly at the type level

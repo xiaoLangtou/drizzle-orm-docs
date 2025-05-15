@@ -1,21 +1,20 @@
-import Tabs from '@mdx/Tabs.astro';
 import Tab from '@mdx/Tab.astro';
 import Npm from '@mdx/Npm.astro';
 
-# ESLint Drizzle Plugin
+# ESLint Drizzle 插件
 
-For cases where it's impossible to perform type checks for specific scenarios, or where it's possible but error messages would be challenging to understand, we've decided to create an ESLint package with recommended rules. This package aims to assist developers in handling crucial scenarios during development
+对于某些无法执行类型检查的特定场景，或者虽然可以执行但错误信息难以理解的情况，我们决定创建一个带有推荐规则的 ESLint 包。该包旨在帮助开发者在开发过程中处理关键场景。
 
-## Install
+## 安装
 
 <Npm>
 eslint-plugin-drizzle
 @typescript-eslint/eslint-plugin @typescript-eslint/parser
 </Npm>
 
-## Usage
+## 使用方法
 
-**`.eslintrc.yml` example**
+**`.eslintrc.yml` 示例**
 ```yml
 root: true
 parser: '@typescript-eslint/parser'
@@ -28,9 +27,9 @@ rules:
   'drizzle/enforce-update-with-where': "error"
 ```
 
-**All config**
+**完整配置**
 
-This plugin exports an `all` that makes use of all rules (except for deprecated ones).
+此插件导出了一个 `all` 配置，它使用了所有规则（已弃用的规则除外）。
 
 ```yml
 root: true
@@ -43,9 +42,9 @@ plugins:
   - drizzle
 ```
 
-**Recommended config**
+**推荐配置**
 
-At the moment, `all` is equivalent to `recommended`
+目前，`all` 配置等同于 `recommended` 配置
 
 ```yml
 root: true
@@ -58,20 +57,19 @@ plugins:
   - drizzle
 ```
 
-## Rules
+## 规则
 
 ### **enforce-delete-with-where**
 
-Enforce using `delete` with the`.where()` clause in the `.delete()` statement. Most of the time, 
-you don't need to delete all rows in the table and require some kind of `WHERE` statements.
+强制在 `.delete()` 语句中使用带有 `.where()` 子句的 `delete`。大多数情况下，
+你不需要删除表中的所有行，而是需要某种 `WHERE` 语句。
 
-Optionally, you can define a `drizzleObjectName` in the plugin options that accept a `string` or
-`string[]`. This is useful when you have objects or classes with a delete method that's not from
-Drizzle. Such a `delete` method will trigger the ESLint rule. To avoid that, you can define the 
-name of the Drizzle object that you use in your codebase (like db) so that the rule would only 
-trigger if the delete method comes from this object:
+可选地，你可以在插件选项中定义一个接受 `string` 或 `string[]` 的 `drizzleObjectName`。
+当你有一个不是来自 Drizzle 的对象或类具有 delete 方法时，这很有用。这样的 `delete` 方法
+会触发 ESLint 规则。为了避免这种情况，你可以定义你在代码库中使用的 Drizzle 对象的名称
+（比如 db），这样规则只会在 delete 方法来自这个对象时触发：
 
-Example, config 1:
+示例，配置 1：
 ```yml
 rules:
   'drizzle/enforce-delete-with-where': "error"
@@ -86,15 +84,15 @@ class MyClass {
 
 const myClassObj = new MyClass();
 
-// ---> Will be triggered by ESLint Rule
+// ---> 将触发 ESLint 规则
 myClassObj.delete()
 
 const db = drizzle(...)
-// ---> Will be triggered by ESLint Rule
+// ---> 将触发 ESLint 规则
 db.delete()
 ```
 
-Example, config 2:
+示例，配置 2：
 ```yml
 rules:
   'drizzle/enforce-delete-with-where':
@@ -111,27 +109,25 @@ class MyClass {
 
 const myClassObj = new MyClass();
 
-// ---> Will NOT be triggered by ESLint Rule
+// ---> 不会触发 ESLint 规则
 myClassObj.delete()
 
 const db = drizzle(...)
-// ---> Will be triggered by ESLint Rule
+// ---> 将触发 ESLint 规则
 db.delete()
 ```
 
 ### **enforce-update-with-where**: 
 
-Enforce using `update` with the`.where()` clause in the `.update()` statement. 
-Most of the time, you don't need to update all rows in the table and require 
-some kind of `WHERE` statements.
+强制在 `.update()` 语句中使用带有 `.where()` 子句的 `update`。
+大多数情况下，你不需要更新表中的所有行，而是需要某种 `WHERE` 语句。
 
-Optionally, you can define a `drizzleObjectName` in the plugin options that accept 
-a `string` or `string[]`. This is useful when you have objects or classes with a delete 
-method that's not from Drizzle. Such as `update` method will trigger the ESLint rule. To 
-avoid that, you can define the name of the Drizzle object that you use in your codebase (like db) 
-so that the rule would only trigger if the delete method comes from this object:
+可选地，你可以在插件选项中定义一个接受 `string` 或 `string[]` 的 `drizzleObjectName`。
+当你有一个不是来自 Drizzle 的对象或类具有 update 方法时，这很有用。这样的 `update` 方法
+会触发 ESLint 规则。为了避免这种情况，你可以定义你在代码库中使用的 Drizzle 对象的名称
+（比如 db），这样规则只会在 update 方法来自这个对象时触发：
 
-Example, config 1:
+示例，配置 1：
 ```yml
 rules:
   'drizzle/enforce-update-with-where': "error"
@@ -146,15 +142,15 @@ class MyClass {
 
 const myClassObj = new MyClass();
 
-// ---> Will be triggered by ESLint Rule
+// ---> 将触发 ESLint 规则
 myClassObj.update()
 
 const db = drizzle(...)
-// ---> Will be triggered by ESLint Rule
+// ---> 将触发 ESLint 规则
 db.update()
 ```
 
-Example, config 2:
+示例，配置 2：
 ```yml
 rules:
   'drizzle/enforce-update-with-where':
@@ -171,10 +167,10 @@ class MyClass {
 
 const myClassObj = new MyClass();
 
-// ---> Will NOT be triggered by ESLint Rule
+// ---> 不会触发 ESLint 规则
 myClassObj.update()
 
 const db = drizzle(...)
-// ---> Will be triggered by ESLint Rule
+// ---> 将触发 ESLint 规则
 db.update()
 ```

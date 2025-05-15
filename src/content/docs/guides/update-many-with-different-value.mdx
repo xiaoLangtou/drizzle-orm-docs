@@ -1,5 +1,5 @@
 ---
-title: Update many with different values for each row
+title: 使用不同值批量更新多行
 slug: update-many-with-different-value
 ---
 
@@ -10,12 +10,12 @@ import IsSupportedChipGroup from "@mdx/IsSupportedChipGroup.astro";
 <IsSupportedChipGroup chips={{PostgreSQL: true, MySQL: true, SQLite: true}}/>
 
 <Prerequisites>
-- Get started with [PostgreSQL](/docs/get-started-postgresql), [MySQL](/docs/get-started-mysql) and [SQLite](/docs/get-started-sqlite)
-- [Update statement](/docs/update)
-- [Filters](/docs/operators) and [sql operator](/docs/sql)
+- 开始使用 [PostgreSQL](/docs/get-started-postgresql)、[MySQL](/docs/get-started-mysql) 和 [SQLite](/docs/get-started-sqlite)
+- [Update语句](/docs/update)
+- [过滤操作符](/docs/operators) 和 [sql操作符](/docs/sql)
 </Prerequisites>
 
-To implement update many with different values for each row within 1 request you can use `sql` operator with `case` statement and `.update().set()` methods like this:
+要在1个请求中使用不同的值更新多行，你可以使用带有`case`语句的`sql`操作符和`.update().set()`方法，像这样：
 
 <Section>
 ```ts {26, 29, 32, 36, 38, 40}
@@ -39,7 +39,7 @@ const inputs = [
   },
 ];
 
-// You have to be sure that inputs array is not empty
+// 你必须确保inputs数组不为空
 if (inputs.length === 0) {
   return;
 }

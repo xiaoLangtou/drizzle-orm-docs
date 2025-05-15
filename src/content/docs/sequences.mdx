@@ -1,53 +1,54 @@
+```
 import IsSupportedChipGroup from '@mdx/IsSupportedChipGroup.astro';
 import Callout from '@mdx/Callout.astro';
 
-# Sequences
+# 序列(Sequences)
 
 <Callout type="info">
-To use this feature you would need to have `drizzle-orm@0.32.0` or higher and `drizzle-kit@0.23.0` or higher
+要使用此功能，您需要安装 `drizzle-orm@0.32.0` 或更高版本以及 `drizzle-kit@0.23.0` 或更高版本
 </Callout>
 
 <IsSupportedChipGroup chips={{ 'PostgreSQL': true, 'SQLite': false, 'MySQL': false, 'SingleStore': false }} />
 
-Sequences in PostgreSQL are special single-row tables created to generate unique identifiers, often used for auto-incrementing primary key values. They provide a thread-safe way to generate unique sequential values across multiple sessions.
+PostgreSQL中的序列是特殊的单行表，用于生成唯一标识符，通常用于自增主键值。它们提供了一种线程安全的方式来在多个会话中生成唯一的顺序值。
 <br/>
 
-**Key Features**
-- Creation and Initialization: Use CREATE SEQUENCE to create a new sequence. Parameters such as increment value, start value, min/max values, and cache size can be specified.
+**主要特性**
+- 创建与初始化: 使用CREATE SEQUENCE创建新序列。可以指定增量值、起始值、最小/最大值和缓存大小等参数。
 
-- Manipulation Functions
-    - `nextval('sequence_name')`: Advances the sequence and returns the next value.
-    - `currval('sequence_name')`: Returns the current value of the sequence for the current session.
-    - `setval('sequence_name', value)`: Sets the sequence's current value.
-    - `lastval()`: Returns the last value returned by nextval in the current session.
+- 操作函数
+    - `nextval('sequence_name')`: 推进序列并返回下一个值
+    - `currval('sequence_name')`: 返回当前会话中序列的当前值
+    - `setval('sequence_name', value)`: 设置序列的当前值
+    - `lastval()`: 返回当前会话中nextval返回的最后一个值
 
-- Ownership: Sequences can be linked to table columns using the OWNED BY clause. Dropping the table or column will automatically drop the associated sequence.
-- Cycling: Sequences can be set to cycle when they reach their maximum or minimum value using the CYCLE option. The default is NO CYCLE.
-- Caching: Sequence values can be preallocated using the CACHE option for improved performance.
+- 所有权: 序列可以使用OWNED BY子句链接到表列。删除表或列将自动删除关联的序列。
+- 循环: 序列可以设置为在达到最大值或最小值时循环，使用CYCLE选项。默认为NO CYCLE。
+- 缓存: 可以使用CACHE选项预分配序列值以提高性能。
 <br/>
 
-**Limitations**
-- Gaps: Sequences are not gapless. Aborted transactions or crashes can lead to gaps in the sequence values.
-- Concurrency: While sequences provide unique values across sessions, the values may be out of order when considering all sessions.
-- No Rollback: Changes to sequences are not rolled back if a transaction fails. This ensures unique values but can lead to gaps.
-- Crash Recovery: Unlogged sequences or sequences modified before a crash might not be properly restored to their previous state.
+**限制**
+- 间隙: 序列不是无间隙的。中止的事务或崩溃可能导致序列值中出现间隙。
+- 并发性: 虽然序列在不同会话中提供唯一值，但考虑到所有会话时，这些值可能是无序的。
+- 无回滚: 如果事务失败，对序列的更改不会回滚。这确保了唯一性但可能导致间隙。
+- 崩溃恢复: 未记录的序列或在崩溃前修改的序列可能无法正确恢复到之前的状态。
 <br/>
 
-**Practical Use**
-- Default Behavior: By default, sequences increment by 1 and start at 1.
-- Custom Behavior: Custom start points, increments, min/max values, and cycling can be specified.
-- Associations: Commonly associated with table columns for auto-incrementing fields, making management of unique identifiers seamless.
+**实际使用**
+- 默认行为: 默认情况下，序列每次递增1并从1开始。
+- 自定义行为: 可以指定自定义起始点、增量、最小/最大值和循环。
+- 关联: 通常与表列关联以实现自增字段，使唯一标识符的管理变得简单。
 <br/>
 
-**Usage Example**
+**使用示例**
 ```ts
 import { pgSchema, pgSequence } from "drizzle-orm/pg-core";
 
-// No params specified
-export const customSequence = pgSequence("name");
+// 无参数
+const customSequence = pgSequence("name");
 
-// Sequence with params
-export const customSequence = pgSequence("name", {
+// 带参数的序列
+const customSequence = pgSequence("name", {
       startWith: 100,
       maxValue: 10000,
       minValue: 100,
@@ -56,7 +57,7 @@ export const customSequence = pgSequence("name", {
       increment: 2
 });
 
-// Sequence in custom schema
-export const customSchema = pgSchema('custom_schema');
-export const customSequence = customSchema.sequence("name");
+// 自定义模式中的序列
+const customSchema = pgSchema('custom_schema');
+const customSequence = customSchema.sequence("name");
 ```

@@ -4,13 +4,13 @@ import IsSupportedChipGroup from '@mdx/IsSupportedChipGroup.astro';
 import Section from '@mdx/Section.astro';
 import Callout from '@mdx/Callout.astro';
 
-# Table schemas
+# 表模式(Schemas)
 
 <IsSupportedChipGroup chips={{ 'PostgreSQL': true, 'MySQL': true, 'SQLite': false, 'SingleStore': true }} />
 
-Drizzle ORM provides you an API for declaring SQL schemas for PostgreSQL and MySQL dialects.
+Drizzle ORM为您提供了声明PostgreSQL和MySQL方言SQL模式的API。
 
-If you declare an entity within a schema, query builder will prepend schema names in queries:<br/>
+如果您在模式中声明实体，查询构建器将在查询中前置模式名称：<br/>
 `select * from "schema"."users"`
 
 <Tabs items={['PostgreSQL', 'MySQL', "SQLite", "SingleStore"]}>
@@ -28,7 +28,6 @@ If you declare an entity within a schema, query builder will prepend schema name
       name: text('name'),
       color: colors('color').default('red'),
     });
-
     
     ```
     ```sql
@@ -67,7 +66,7 @@ If you declare an entity within a schema, query builder will prepend schema name
     </Section>
   </Tab>
   <Tab>
-  SQLite does not have support for schemas 😕
+  SQLite不支持模式 😕
   </Tab>
   <Tab>
     <Section>
@@ -94,6 +93,7 @@ If you declare an entity within a schema, query builder will prepend schema name
 </Tabs>
 
 {/* TODO: ??? example > **Warning**
-> If you will have tables with same names in different schemas then drizzle will respond with `never[]` error in result types and error from database
+> 如果在不同模式中有相同名称的表，drizzle会在结果类型中返回`never[]`错误并从数据库返回错误
 >
-> In this case you may use [alias syntax](./joins#join-aliases-and-self-joins) */}
+> 在这种情况下，您可以使用[别名语法](./joins#join-aliases-and-self-joins) */}
+```

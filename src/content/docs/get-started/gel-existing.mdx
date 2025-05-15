@@ -20,16 +20,16 @@ import SetupEnv from '@mdx/get-started/SetupEnv.mdx';
 
 <Breadcrumbs/>
 
-# Get Started with Drizzle and Gel in existing project
+# 在现有项目中开始使用 Drizzle 和 Gel
 
 <Prerequisites>
-  - **tsx** - package for running TypeScript files - [read here](https://tsx.is/)
-  - **gel-js** - package for querying your Gel database - [read here](https://github.com/geldata/gel-js)
+  - **tsx** - 用于运行 TypeScript 文件的包 - [点击了解更多](https://tsx.is/)
+  - **gel-js** - 用于查询 Gel 数据库的包 - [点击了解更多](https://github.com/geldata/gel-js)
 </Prerequisites>
 
-Drizzle has native support for Gel connections with the `gel` client.
+Drizzle 通过 `gel` 客户端原生支持 Gel 连接。
 
-This is the basic file structure of the project. In the `src` directory, we have table definition in `index.ts`. In `drizzle` folder there are generated Gel to Drizzle schema
+这是项目的基本文件结构。在 `src` 目录中，我们在 `index.ts` 中有表定义。在 `drizzle` 文件夹中有生成的 Gel 到 Drizzle 的模式
 
 ```plaintext
 📦 <project root>
@@ -46,17 +46,17 @@ This is the basic file structure of the project. In the `src` directory, we have
  └ 📜 tsconfig.json
 ```
 
-#### Step 1 - Install required packages
+#### 步骤 1 - 安装所需的包
 <Npm>
   drizzle-orm gel
   -D drizzle-kit tsx
 </Npm>
 
-#### Step 2 - Setup Drizzle config file
+#### 步骤 2 - 设置 Drizzle 配置文件
 
-**Drizzle config** - a configuration file that is used by [Drizzle Kit](/docs/kit-overview) and contains all the information about your database connection, migration folder and schema files.
+**Drizzle 配置** - 一个由 [Drizzle Kit](/docs/kit-overview) 使用的配置文件，包含了所有关于您的数据库连接、迁移文件夹和模式文件的信息。
 
-Create a `drizzle.config.ts` file in the root of your project and add the following content:
+在项目根目录创建一个 `drizzle.config.ts` 文件并添加以下内容：
 
 ```typescript copy filename="drizzle.config.ts"
 import { defineConfig } from 'drizzle-kit';
@@ -66,14 +66,14 @@ export default defineConfig({
 });
 ```
 
-#### Step 3 - Pull Gel types to Drizzle schema
+#### 步骤 3 - 将 Gel 类型拉取到 Drizzle 模式
 
-Pull your database schema:
+拉取您的数据库模式：
 <Npx>
 drizzle-kit pull
 </Npx>
 
-Here is an example of the generated schema.ts file:
+这是生成的 schema.ts 文件的示例：
 
 ```typescript filename="drizzle/schema.ts"
 import { gelTable, uniqueIndex, uuid, smallint, text } from "drizzle-orm/gel-core"
@@ -89,9 +89,9 @@ export const users = gelTable("users", {
 ]);
 ```
 
-#### Step 4 - Connect Drizzle ORM to the database
+#### 步骤 4 - 将 Drizzle ORM 连接到数据库
 
-Create a `index.ts` file in the `src` directory and initialize the connection:
+在 `src` 目录中创建一个 `index.ts` 文件并初始化连接：
 
 ```typescript copy filename="src/index.ts"
 import { drizzle } from "drizzle-orm/gel";
@@ -101,7 +101,7 @@ const gelClient = createClient();
 const db = drizzle({ client: gelClient });
 ```
 
-#### Step 5 - Query the database
+#### 步骤 5 - 查询数据库
 
 ```typescript copy filename="src/index.ts"
 import { eq } from "drizzle-orm";
@@ -120,10 +120,10 @@ async function main() {
   };
 
   await db.insert(users).values(user);
-  console.log("New user created!");
+  console.log("新用户已创建！");
 
   const usersResponse = await db.select().from(users);
-  console.log("Getting all users from the database: ", usersResponse);
+  console.log("从数据库获取所有用户：", usersResponse);
   /*
   const users: {
     id: number;
@@ -139,15 +139,15 @@ async function main() {
       age: 31,
     })
     .where(eq(users.email, user.email));
-  console.log("User info updated!");
+  console.log("用户信息已更新！");
 
   await db.delete(users).where(eq(users.email, user.email));
-  console.log("User deleted!");
+  console.log("用户已删除！");
 }
 
 main();
 ```
 
-#### Step 6 - Run index.ts file
+#### 步骤 6 - 运行 index.ts 文件
 
 <RunFile/>

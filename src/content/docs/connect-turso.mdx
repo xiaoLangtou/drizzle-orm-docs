@@ -8,29 +8,29 @@ import CodeTabs from "@mdx/CodeTabs.astro";
 import LibsqlTable from "@mdx/LibsqlTable.mdx";
 import LibsqlTabs from "@mdx/LibsqlTabs.mdx";
 
-# Drizzle \<\> Turso
+# Drizzle <> Turso</>
 
 <Prerequisites>
-- Database [connection basics](/docs/connect-overview) with Drizzle
-- Turso Database - [website](https://docs.turso.tech/introduction)
-- LibSQL driver - [website](https://docs.turso.tech/sdk/ts/reference) & [GitHub](https://github.com/tursodatabase/libsql-client-ts)
+- 数据库[连接基础](/docs/connect-overview)与 Drizzle
+- Turso 数据库 - [官网](https://docs.turso.tech/introduction)
+- LibSQL 驱动 - [官网](https://docs.turso.tech/sdk/ts/reference) & [GitHub](https://github.com/tursodatabase/libsql-client-ts)
 </Prerequisites>
 
-According to the **[official website](https://turso.tech/drizzle)**, 
-Turso is a **[libSQL](https://github.com/libsql/libsql)** powered edge SQLite database as a service.
-  
-Drizzle ORM natively supports libSQL driver, 
-we embrace SQL dialects and dialect specific drivers and syntax and mirror most popular 
-SQLite-like `all`, `get`, `values` and `run` query methods syntax. 
+根据**[官方网站](https://turso.tech/drizzle)**，
+Turso 是一个由 **[libSQL](https://github.com/libsql/libsql)** 驱动的边缘 SQLite 数据库即服务。
 
-#### Step 1 - Install packages
+Drizzle ORM 原生支持 libSQL 驱动，
+我们支持 SQL 方言和方言特定的驱动程序和语法，并且模仿最流行的
+SQLite 风格的 `all`、`get`、`values` 和 `run` 查询方法语法。
+
+#### 步骤 1 - 安装包
 <Npm>
 drizzle-orm @libsql/client
 -D drizzle-kit
 </Npm>
 
-#### Step 2 - Initialize the driver
-Drizzle has native support for all `@libsql/client` driver variations:
+#### 步骤 2 - 初始化驱动
+Drizzle 原生支持所有 `@libsql/client` 驱动变体：
 
 <LibsqlTable />
 
@@ -39,7 +39,7 @@ Drizzle has native support for all `@libsql/client` driver variations:
 <LibsqlTabs />
 
 
-If you need to provide your existing driver:
+如果你需要提供你现有的驱动：
 
 <CodeTabs items={["default", "web"]}>
 ```typescript copy
@@ -70,7 +70,7 @@ const result = await db.select().from(users).all()
 ```
 </CodeTabs>
 
-#### Step 3 - make a query
+#### 步骤 3 - 执行查询
 
 ```ts
 import { drizzle } from 'drizzle-orm/libsql';
@@ -89,6 +89,6 @@ const users = s.sqliteTable("users", {
 const result = await db.select().from(users);
 ```
 
-#### What's next?
+#### 下一步？
 
 <WhatsNextPostgres/>

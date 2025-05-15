@@ -20,7 +20,7 @@ import {
 
 // https://astro.build/config
 export default defineConfig({
-  site: import.meta.env.DEV ? "http://localhost:4321" : "https://orm.drizzle.team",
+  site: import.meta.env.DEV ? "http://localhost:4321" : "https://drizzle.weipc0110.cn",
   build: {
     format: "file", // mandatory due to CloudFlare Pages trailing slash problem
   },
@@ -35,7 +35,7 @@ export default defineConfig({
     }
   },
   image: {
-    domains: ["img.youtube.com"],
+    domains: [],
   },
   prefetch: import.meta.env.DEV ? undefined : {
     prefetchAll: true,

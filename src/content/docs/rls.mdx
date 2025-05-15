@@ -1,21 +1,21 @@
 import Callout from '@mdx/Callout.astro';
 
-# Row-Level Security (RLS)
+# 行级安全(RLS)
 
-With Drizzle, you can enable Row-Level Security (RLS) for any Postgres table, create policies with various options, and define and manage the roles those policies apply to.
+使用Drizzle，您可以为任何Postgres表启用行级安全(RLS)，创建具有各种选项的策略，并定义和管理这些策略适用的角色。
 
-Drizzle supports a raw representation of Postgres policies and roles that can be used in any way you want. This works with popular Postgres database providers such as `Neon` and `Supabase`.
+Drizzle支持Postgres策略和角色的原始表示，可以按您想要的任何方式使用。这与流行的Postgres数据库提供商如`Neon`和`Supabase`兼容。
 
-In Drizzle, we have specific predefined RLS roles and functions for RLS with both database providers, but you can also define your own logic.
+在Drizzle中，我们为这两种数据库提供商提供了特定的预定义RLS角色和函数，但您也可以定义自己的逻辑。
 
-## Enable RLS
+## 启用RLS
 
-If you just want to enable RLS on a table without adding policies, you can use `.enableRLS()`
+如果您只想在表上启用RLS而不添加策略，可以使用`.enableRLS()`
 
-As mentioned in the PostgreSQL documentation:
+如PostgreSQL文档所述：
 
-> If no policy exists for the table, a default-deny policy is used, meaning that no rows are visible or can be modified. 
-Operations that apply to the whole table, such as TRUNCATE and REFERENCES, are not subject to row security.
+> 如果表不存在任何策略，则使用默认拒绝策略，意味着没有行可见或可修改。
+> 应用于整个表的操作，如TRUNCATE和REFERENCES，不受行安全限制。
 
 ```ts
 import { integer, pgTable } from 'drizzle-orm/pg-core';
@@ -25,13 +25,13 @@ export const users = pgTable('users', {
 }).enableRLS();
 ```
 
-<Callout title='important'>
-If you add a policy to a table, RLS will be enabled automatically. So, there’s no need to explicitly enable RLS when adding policies to a table.
+<Callout title='重要'>
+如果向表添加策略，RLS将自动启用。因此，在向表添加策略时无需显式启用RLS。
 </Callout>
 
-## Roles
+## 角色
 
-Currently, Drizzle supports defining roles with a few different options, as shown below. Support for more options will be added in a future release.
+目前，Drizzle支持使用以下不同选项定义角色。未来版本将添加更多选项支持。
 
 ```ts
 import { pgRole } from 'drizzle-orm/pg-core';
@@ -39,7 +39,7 @@ import { pgRole } from 'drizzle-orm/pg-core';
 export const admin = pgRole('admin', { createRole: true, createDb: true, inherit: true });
 ```
 
-If a role already exists in your database, and you don’t want drizzle-kit to ‘see’ it or include it in migrations, you can mark the role as existing.
+如果角色已存在于数据库中，并且您不希望drizzle-kit"看到"它或将其包含在迁移中，可以将角色标记为已存在。
 
 ```ts
 import { pgRole } from 'drizzle-orm/pg-core';
@@ -47,15 +47,15 @@ import { pgRole } from 'drizzle-orm/pg-core';
 export const admin = pgRole('admin').existing();
 ```
 
-## Policies
+## 策略
 
-To fully leverage RLS, you can define policies within a Drizzle table.
+要充分利用RLS，您可以在Drizzle表中定义策略。
 
-<Callout title='info'>
-In PostgreSQL, policies should be linked to an existing table. Since policies are always associated with a specific table, we decided that policy definitions should be defined as a parameter of `pgTable`
+<Callout title='信息'>
+在PostgreSQL中，策略应链接到现有表。由于策略总是与特定表关联，我们决定策略定义应作为`pgTable`的参数定义。
 </Callout>
 
-**Example of pgPolicy with all available properties**
+**包含所有可用属性的pgPolicy示例**
 ```ts
 import { sql } from 'drizzle-orm';
 import { integer, pgPolicy, pgRole, pgTable } from 'drizzle-orm/pg-core';
@@ -75,21 +75,25 @@ export const users = pgTable('users', {
 ]);
 ```
 
-**Policy options**
+**策略选项**
 |                          |                                                                                                                                           |
 | :----------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`                     | Possible values are `permissive` or `restrictive`                                                                                         |
-| `to`                     | Specifies the role to which the policy applies. Possible values include `public`, `current_role`, `current_user`, `session_user`, or any other role name as a string. You can also reference a `pgRole` object. |
-| `for`                    | Defines the commands this policy will be applied to. Possible values are `all`, `select`, `insert`, `update`, `delete`.                   |
-| `using`                  | The SQL statement that will be applied to the `USING` part of the policy creation statement.                                              |
-| `withCheck`              | An SQL statement that will be applied to the `WITH CHECK` part of the policy creation statement.                                          |
+| `as`                     | 可能值为`permissive`或`restrictive`                                                                                         |
+| `to`                     | 指定策略适用的角色。可能值包括`public`、`current_role`、`current_user`、`session_user`或任何其他角色名称字符串。您也可以引用`pgRole`对象。 |
+| `for`                    | 定义此策略将应用于的命令。可能值为`all`、`select`、`insert`、`update`、`delete`。                   |
+| `using`                  | 将应用于策略创建语句`USING`部分的SQL语句。                                              |
+| `withCheck`              | 将应用于策略创建语句`WITH CHECK`部分的SQL语句。                                          |
+| `to`                     | 指定策略适用的角色。可能值包括`public`、`current_role`、`current_user`、`session_user`或任何其他角色名称字符串。您也可以引用`pgRole`对象。 |
+| `for`                    | 定义此策略将应用于的命令。可能值为`all`、`select`、`insert`、`update`、`delete`。                   |
+| `using`                  | 将应用于策略创建语句`USING`部分的SQL语句。                                              |
+| `withCheck`              | 将应用于策略创建语句`WITH CHECK`部分的SQL语句。                                          |
 
 
-**Link Policy to an existing table**
+**将策略链接到现有表**
 
-There are situations where you need to link a policy to an existing table in your database. 
-The most common use case is with database providers like `Neon` or `Supabase`, where you need to add a policy 
-to their existing tables. In this case, you can use the `.link()` API
+有时您需要将策略链接到数据库中现有表。
+最常见的情况是与`Neon`或`Supabase`等数据库提供商一起使用时，您需要向其现有表添加策略。
+在这种情况下，您可以使用`.link()` API
 
 ```ts
 import { sql } from "drizzle-orm";
@@ -106,13 +110,14 @@ export const policy = pgPolicy("authenticated role insert policy", {
 {/* <Callout title='important'>
 <Callout> */}
 
-## Migrations
+## 迁移
 
-If you are using drizzle-kit to manage your schema and roles, there may be situations where you want to refer to roles that are not defined in your Drizzle schema. In such cases, you may want drizzle-kit to skip managing these roles without having to define each role in your drizzle schema and marking it with `.existing()`.
+如果您使用drizzle-kit管理模式和角色，可能会有需要引用未在Drizzle模式中定义的角色的情况。
+在这些情况下，您可能希望drizzle-kit跳过管理这些角色，而无需在drizzle模式中定义每个角色并用`.existing()`标记。
 
-In these cases, you can use `entities.roles` in `drizzle.config.ts`. For a complete reference, refer to the the [`drizzle.config.ts`](docs/drizzle-config-file) documentation.
+在这些情况下，您可以在`drizzle.config.ts`中使用`entities.roles`。完整参考请参阅[`drizzle.config.ts`](docs/drizzle-config-file)文档。
 
-By default, `drizzle-kit` does not manage roles for you, so you will need to enable this feature in `drizzle.config.ts`.
+默认情况下，`drizzle-kit`不管理角色，因此您需要在`drizzle.config.ts`中启用此功能。
 
 ```ts {12-14}
 // drizzle.config.ts
@@ -132,9 +137,9 @@ export default defineConfig({
 });
 ```
 
-In case you need additional configuration options, let's take a look at a few more examples.
+如果您需要额外的配置选项，让我们看几个例子。
 
-**You have an `admin` role and want to exclude it from the list of manageable roles**
+**您有一个`admin`角色并希望将其从可管理角色列表中排除**
 
 ```ts
 // drizzle.config.ts
@@ -150,7 +155,7 @@ export default defineConfig({
 });
 ```
 
-**You have an `admin` role and want to include it in the list of manageable roles**
+**您有一个`admin`角色并希望将其包含在可管理角色列表中**
 
 ```ts
 // drizzle.config.ts
@@ -166,7 +171,7 @@ export default defineConfig({
 });
 ```
 
-**If you are using `Neon` and want to exclude Neon-defined roles, you can use the provider option**
+**如果您使用`Neon`并希望排除Neon定义的角色，可以使用provider选项**
 
 ```ts
 // drizzle.config.ts
@@ -182,7 +187,7 @@ export default defineConfig({
 });
 ```
 
-**If you are using `Supabase` and want to exclude Supabase-defined roles, you can use the provider option**
+**如果您使用`Supabase`并希望排除Supabase定义的角色，可以使用provider选项**
 
 ```ts
 // drizzle.config.ts
@@ -198,9 +203,9 @@ export default defineConfig({
 });
 ```
 
-<Callout title='important'>
-You may encounter situations where Drizzle is slightly outdated compared to new roles specified by your database provider. 
-In such cases, you can use the `provider` option and `exclude` additional roles:
+<Callout title='重要'>
+您可能会遇到Drizzle与数据库提供商指定的新角色相比稍微过时的情况。
+在这种情况下，您可以使用`provider`选项并`exclude`其他角色：
 
 ```ts
 // drizzle.config.ts
@@ -218,9 +223,9 @@ export default defineConfig({
 ```
 </Callout>
 
-## RLS on views
+## 视图上的RLS
 
-With Drizzle, you can also specify RLS policies on views. For this, you need to use `security_invoker` in the view's WITH options. Here is a small example:
+使用Drizzle，您还可以在视图上指定RLS策略。为此，您需要在视图的WITH选项中使用`security_invoker`。这是一个小例子：
 
 ```ts {5}
 ...
@@ -240,12 +245,11 @@ export const roomsUsersProfiles = pgView("rooms_users_profiles")
   );
 ```
 
-## Using with Neon
+## 与Neon一起使用
 
-The Neon Team helped us implement their vision of a wrapper on top of our raw policies API. We defined a specific 
-`/neon` import with the `crudPolicy` function that includes predefined functions and Neon's default roles.
+Neon团队帮助我们实现了他们对我们原始策略API的包装愿景。我们定义了一个特定的`/neon`导入，其中包含`crudPolicy`函数，该函数包括预定义函数和Neon的默认角色。
 
-Here's an example of how to use the `crudPolicy` function:
+以下是使用`crudPolicy`函数的示例：
 
 ```ts
 import { crudPolicy } from 'drizzle-orm/neon';
@@ -260,7 +264,7 @@ export const users = pgTable('users', {
 ]);
 ```
 
-This policy is equivalent to:
+此策略等效于：
 
 ```ts
 import { sql } from 'drizzle-orm';
@@ -295,7 +299,7 @@ export const users = pgTable('users', {
 ]);
 ```
 
-`Neon` exposes predefined `authenticated` and `anaonymous` roles and related functions. If you are using `Neon` for RLS, you can use these roles, which are marked as existing, and the related functions in your RLS queries.
+`Neon`公开了预定义的`authenticated`和`anonymous`角色及相关函数。如果您使用`Neon`进行RLS，可以在RLS查询中使用这些标记为已存在的角色及相关函数。
 
 ```ts
 // drizzle-orm/neon
@@ -316,7 +320,7 @@ export const usersSync = neonIdentitySchema.table('users_sync', {
 });
 ```
 
-For example, you can use the `Neon` predefined roles and functions like this:
+例如，您可以像这样使用`Neon`预定义角色和函数：
 
 
 ```ts
@@ -337,10 +341,10 @@ export const users = pgTable('users', {
 ]);
 ```
 
-## Using with Supabase
+## 与Supabase一起使用
 
-We also have a `/supabase` import with a set of predefined roles marked as existing, which you can use in your schema. 
-This import will be extended in a future release with more functions and helpers to make using RLS and `Supabase` simpler.
+我们还有一个`/supabase`导入，其中包含一组标记为已存在的预定义角色，您可以在模式中使用。
+此导入将在未来版本中扩展更多函数和助手，使使用RLS和`Supabase`更简单。
 
 ```ts
 // drizzle-orm/supabase
@@ -351,7 +355,7 @@ export const postgresRole = pgRole('postgres_role').existing();
 export const supabaseAuthAdminRole = pgRole('supabase_auth_admin').existing();
 ```
 
-For example, you can use the `Supabase` predefined roles like this:
+例如，您可以像这样使用`Supabase`预定义角色：
 
 ```ts
 import { sql } from 'drizzle-orm';
@@ -371,7 +375,7 @@ export const users = pgTable('users', {
 ]);
 ```
 
-The `/supabase` import also includes predefined tables and functions that you can use in your application
+`/supabase`导入还包括您可以在应用程序中使用的预定义表和函数
 
 ```ts
 // drizzle-orm/supabase
@@ -397,8 +401,8 @@ export const authUid = sql`(select auth.uid())`;
 export const realtimeTopic = sql`realtime.topic()`;
 ```
 
-This allows you to use it in your code, and Drizzle Kit will treat them as existing databases,
-using them only as information to connect to other entities
+这允许您在代码中使用它，Drizzle Kit会将其视为现有数据库，
+仅将它们作为信息连接到其他实体
 
 ```ts
 import { foreignKey, pgPolicy, pgTable, text, uuid } from "drizzle-orm/pg-core";
@@ -414,13 +418,13 @@ export const profiles = pgTable(
   (table) => [
     foreignKey({
       columns: [table.id],
-	  // reference to the auth table from Supabase
+	  // 引用来自Supabase的auth表
       foreignColumns: [authUsers.id],
       name: "profiles_id_fk",
     }).onDelete("cascade"),
     pgPolicy("authenticated can view all profiles", {
       for: "select",
-	  // using predefined role from Supabase
+	  // 使用来自Supabase的预定义角色
       to: authenticatedRole,
       using: sql`true`,
     }),
@@ -428,7 +432,7 @@ export const profiles = pgTable(
 );
 ```
 
-Let's check an example of adding a policy to a table that exists in `Supabase`
+让我们看一个向`Supabase`中存在的表添加策略的示例
 
 ```ts
 import { sql } from "drizzle-orm";
@@ -442,13 +446,13 @@ export const policy = pgPolicy("authenticated role insert policy", {
 }).link(realtimeMessages);
 ```
 
-We also have a great example showcasing how to use Drizzle RLS with Supabase and how to make actual queries with it. 
-It also includes a great wrapper, `createDrizzle`, that can handle all the transactional work with Supabase for you. 
-In upcoming releases, it will be moved to drizzle-orm/supabase, allowing you to use it natively
+我们还有一个很好的示例展示了如何将Drizzle RLS与Supabase一起使用以及如何进行实际查询。
+它还包括一个很好的包装器`createDrizzle`，可以为您处理所有与Supabase的事务工作。
+在即将发布的版本中，它将移至drizzle-orm/supabase，允许您本地使用它
 
-Please check [Drizzle SupaSecureSlack repo](https://github.com/rphlmr/drizzle-supabase-rls)
+请查看[Drizzle SupaSecureSlack仓库](https://github.com/rphlmr/drizzle-supabase-rls)
 
-Here is an example of an implementation from this repository
+以下是来自此仓库的实现示例
 ```ts
 type SupabaseToken = {
   iss?: string;

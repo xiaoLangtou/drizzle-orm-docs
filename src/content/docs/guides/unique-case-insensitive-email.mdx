@@ -1,5 +1,5 @@
 ---
-title: Unique and Case-Insensitive Email Handling
+title: 唯一且大小写不敏感的邮箱处理
 slug: unique-case-insensitive-email
 ---
 
@@ -10,18 +10,18 @@ import CodeTab from '@mdx/CodeTab.astro';
 import Callout from '@mdx/Callout.astro';
 
 <Prerequisites>
-- Get started with [PostgreSQL](/docs/get-started-postgresql), [MySQL](/docs/get-started-mysql) and [SQLite](/docs/get-started-sqlite)
-- [Indexes](/docs/indexes-constraints#indexes)
-- [Insert statement](/docs/insert) and [Select method](/docs/select)
-- [sql operator](/docs/sql)
-- You should have `drizzle-orm@0.31.0` and `drizzle-kit@0.22.0` or higher.
+- 开始使用 [PostgreSQL](/docs/get-started-postgresql)、[MySQL](/docs/get-started-mysql) 和 [SQLite](/docs/get-started-sqlite)
+- [索引](/docs/indexes-constraints#indexes)
+- [Insert语句](/docs/insert) 和 [Select方法](/docs/select)
+- [sql操作符](/docs/sql)
+- 你应该使用 `drizzle-orm@0.31.0` 和 `drizzle-kit@0.22.0` 或更高版本。
 </Prerequisites>
 
 ### PostgreSQL
 
-To implement a unique and case-insensitive `email` handling in PostgreSQL with Drizzle, you can create a unique index on the lowercased `email` column. This way, you can ensure that the `email` is unique regardless of the case.
+要在PostgreSQL中使用Drizzle实现唯一且大小写不敏感的`email`处理，你可以在小写的`email`列上创建一个唯一索引。这样，你可以确保`email`在不考虑大小写的情况下是唯一的。
 
-Drizzle has simple and flexible API, which lets you easily create such an index using SQL-like syntax:
+Drizzle有简单且灵活的API，让你可以使用类SQL语法轻松创建这样的索引：
 <CodeTabs items={["schema.ts", "migration.sql"]}>
   <CodeTab>
   ```ts copy {12,13}
@@ -41,7 +41,7 @@ Drizzle has simple and flexible API, which lets you easily create such an index 
     ],
   );
 
-  // custom lower function
+  // 自定义lower函数
   export function lower(email: AnyPgColumn): SQL {
     return sql`lower(${email})`;
   }
@@ -58,7 +58,7 @@ Drizzle has simple and flexible API, which lets you easily create such an index 
   ```
 </CodeTabs>
 
-This is how you can select user by `email` with `lower` function:
+这是如何使用`lower`函数按`email`选择用户：
 
 <Section>
 ```ts copy {10}
@@ -82,9 +82,9 @@ select * from "users" where lower(email) = 'john@email.com';
 
 ### MySQL
 
-In MySQL, the default collation setting for string comparison is case-insensitive, which means that when performing operations like searching or comparing strings in SQL queries, the case of the characters does not affect the results. However, because collation settings can vary and may be configured to be case-sensitive, we will explicitly ensure that the `email` is unique regardless of case by creating a unique index on the lowercased `email` column.
+在MySQL中，字符串比较的默认排序规则是大小写不敏感的，这意味着在执行SQL查询中的搜索或比较字符串操作时，字符的大小写不会影响结果。然而，由于排序规则设置可能会有所不同，并且可能被配置为大小写敏感，我们将通过在小写的`email`列上创建唯一索引来显式确保`email`在不考虑大小写的情况下是唯一的。
 
-Drizzle has simple and flexible API, which lets you easily create such an index using SQL-like syntax:
+Drizzle有简单且灵活的API，让你可以使用类SQL语法轻松创建这样的索引：
 <CodeTabs items={["schema.ts", "migration.sql"]}>
   <CodeTab>
   ```ts copy {12,13}
@@ -104,7 +104,7 @@ Drizzle has simple and flexible API, which lets you easily create such an index 
     ]
   );
 
-  // custom lower function
+  // 自定义lower函数
   export function lower(email: AnyMySqlColumn): SQL {
     return sql`(lower(${email}))`;
   }
@@ -122,10 +122,10 @@ Drizzle has simple and flexible API, which lets you easily create such an index 
 </CodeTabs>
 
 <Callout type="warning">
-Functional indexes are supported in MySQL starting from version `8.0.13`. For the correct syntax, the expression should be enclosed in parentheses, for example, `(lower(column))`.
+函数索引从MySQL版本`8.0.13`开始支持。对于正确的语法，表达式应该用括号括起来，例如`(lower(column))`。
 </Callout>
 
-This is how you can select user by `email` with `lower` function:
+这是如何使用`lower`函数按`email`选择用户：
 
 <Section>
 ```ts copy {10}
@@ -149,9 +149,9 @@ select * from `users` where lower(email) = 'john@email.com';
 
 ### SQLite
 
-To implement a unique and case-insensitive `email` handling in SQLite with Drizzle, you can create a unique index on the lowercased `email` column. This way, you can ensure that the `email` is unique regardless of the case.
+要在SQLite中使用Drizzle实现唯一且大小写不敏感的`email`处理，你可以在小写的`email`列上创建一个唯一索引。这样，你可以确保`email`在不考虑大小写的情况下是唯一的。
 
-Drizzle has simple and flexible API, which lets you easily create such an index using SQL-like syntax:
+Drizzle有简单且灵活的API，让你可以使用类SQL语法轻松创建这样的索引：
 
 <CodeTabs items={["schema.ts", "migration.sql"]}>
   <CodeTab>
@@ -172,7 +172,7 @@ Drizzle has simple and flexible API, which lets you easily create such an index 
     ]
   );
 
-  // custom lower function
+  // 自定义lower函数
   export function lower(email: AnySQLiteColumn): SQL {
     return sql`lower(${email})`;
   }
@@ -189,7 +189,7 @@ Drizzle has simple and flexible API, which lets you easily create such an index 
   ```
 </CodeTabs>
 
-This is how you can select user by `email` with `lower` function:
+这是如何使用`lower`函数按`email`选择用户：
 
 <Section>
 ```ts copy {10}
